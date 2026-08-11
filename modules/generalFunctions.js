@@ -20,4 +20,27 @@ export class GeneralFunctions {
       }
     }
   }
+
+  async generateRandomString(
+    numberOfLetters = 25,
+    onlyLetters = false,
+    onlyDigits = false
+  ) {
+    let characters;
+    if (onlyLetters) {
+      characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    } else if (onlyDigits) {
+      characters = "123456789";
+    } else {
+      characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    }
+    let result = "";
+    const charactersLength = characters.length;
+    for (let i = 0; i < numberOfLetters; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+  }
 }

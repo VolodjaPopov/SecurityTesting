@@ -1,4 +1,4 @@
-import { test, expect } from "../modules/base.js";
+import { test } from "../modules/base.js";
 
 let page;
 
