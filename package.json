@@ -1,0 +1,25 @@
+{
+  "name": "securitytesting",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VolodjaPopov/SecurityTesting.git"
+  },
+  "keywords": [],
+  "author": "Volođa Popov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VolodjaPopov/SecurityTesting/issues"
+  },
+  "homepage": "https://github.com/VolodjaPopov/SecurityTesting#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0"
+  }
+}
