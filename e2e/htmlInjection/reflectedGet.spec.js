@@ -15,4 +15,8 @@ test.describe("HTML injection - Reflected (GET)", () => {
   test("Low security, GET (Field entry)", async ({ htmlInjection }) => {
     await htmlInjection.verifyNameFields({});
   });
+
+  test("Low security, GET (URL entry)", async ({ htmlInjection }) => {
+    await htmlInjection.verifyURLInjections({});
+  });
 });
