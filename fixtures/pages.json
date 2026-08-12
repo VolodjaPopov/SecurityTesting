@@ -1,3 +1,5 @@
 {
-  "htmlInjectionReflectedGet": "htmli_get.php"
+  "htmlInjectionReflectedGet": "htmli_get.php",
+  "htmlInjectionReflectedPost": "htmli_post.php",
+  "htmlInjectionStored": "htmli_stored.php"
 }

@@ -1,5 +1,6 @@
 import { GeneralFunctions } from "./generalFunctions";
 import { log } from "./base";
+import messages from "../fixtures/messages.json";
 
 let generalFunctions;
 
@@ -10,6 +11,14 @@ export class HTMLInjection {
     this.firstName = page.locator('[id="firstname"]');
     this.lastName = page.locator('[id="lastname"]');
     this.goButton = page.locator('button[value="submit"]:has-text("Go")');
+    this.tableEntry = page.locator('[id="entry"]');
+    this.tableSubmitButton = page.locator(
+      'button[value="submit"]:has-text("Submit")'
+    );
+    this.addEntryButton = page.locator('[id="entry_add"]');
+    this.allEntriesButton = page.locator('[id="entry_all"]');
+    this.deleteEntryButton = page.locator('[id="entry_delete"]');
+    this.table = page.locator('[id="table_yellow"]');
   }
 
   async wrapHeading(value, heading = "h1") {
@@ -43,11 +52,9 @@ export class HTMLInjection {
         .locator(`${wrappedFirstName[1]}:has-text('${await firstName}')`)
         .isVisible()
     ) {
-      log.warn(
-        `The following field is vulnerable to HTML injections, broken by the following pattern:`
-      );
+      log.warn(messages.htmlInjectionTrue);
       log.plain(wrappedFirstName[0]);
-    } else log.info("No HTML injections found for this field");
+    } else log.info(messages.htmlInjectionFalse);
   }
 
   async verifyNameFields({
@@ -65,12 +72,27 @@ export class HTMLInjection {
           await this.page
             .locator(`${wrappedFirstName[1]}:has-text('${await firstName}')`)
             .isVisible()
-        )
-          log.warn(
-            `The following field is vulnerable to HTML injections, please review test carefully`
-          );
-        else log.info("No HTML injections found for this field");
+        ) {
+          log.warn(messages.htmlInjectionTrue);
+          log.plain(wrappedFirstName[0]);
+        } else log.info(messages.htmlInjectionFalse);
         break;
     }
+  }
+
+  async verifyTableEntryInjection({
+    value = generalFunctions.generateRandomString(10),
+  }) {
+    let wrappedValue = await this.wrapHeading(await value);
+    await this.tableEntry.fill(wrappedValue[0]);
+    await this.tableSubmitButton.click();
+    if (
+      await this.table
+        .locator(`${wrappedValue[1]}:has-text('${await value}')`)
+        .isVisible()
+    ) {
+      log.warn(messages.htmlInjectionTrue);
+      log.plain(wrappedValue[0]);
+    } else log.info(messages.htmlInjectionFalse);
   }
 }
