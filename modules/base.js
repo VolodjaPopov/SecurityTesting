@@ -4,6 +4,7 @@ import { chromium, test as baseTest } from "@playwright/test";
 import { GeneralFunctions } from "./generalFunctions";
 import { Login } from "./login";
 import { HTMLInjection } from "./htmlInjection";
+import { SQLInjection } from "./sqlInjection";
 
 const testPages = baseTest.extend({
   wpage: [
@@ -28,6 +29,9 @@ const testPages = baseTest.extend({
   },
   htmlInjection: async ({ wpage }, use) => {
     await use(new HTMLInjection(wpage));
+  },
+  sqlInjection: async ({ wpage }, use) => {
+    await use(new SQLInjection(wpage));
   },
 });
 
