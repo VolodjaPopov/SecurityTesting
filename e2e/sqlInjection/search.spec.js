@@ -14,3 +14,15 @@ test.describe("SQL injection - GET Search", () => {
     await sqlInjection.verifySearchField();
   });
 });
+
+test.describe("SQL injection - GET Select", () => {
+  test.beforeEach(async ({ wpage, login }) => {
+    page = wpage;
+    await login.loginUser({});
+    await page.goto(`${process.env.BASE_URL}${pages.sqlInjectionGetSelect}`);
+  });
+
+  test("Select GET", async ({ sqlInjection }) => {
+    await sqlInjection.verifyURLInjections({});
+  });
+});

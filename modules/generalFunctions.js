@@ -43,4 +43,11 @@ export class GeneralFunctions {
 
     return result;
   }
+
+  async updateParam(parameter, newValue) {
+    let currentURLStr = await this.page.url();
+    let currentURL = new URL(currentURLStr);
+    currentURL.searchParams.set(parameter, await newValue);
+    return currentURL.toString();
+  }
 }

@@ -2,5 +2,6 @@
   "htmlInjectionReflectedGet": "htmli_get.php",
   "htmlInjectionReflectedPost": "htmli_post.php",
   "htmlInjectionStored": "htmli_stored.php",
-  "sqlInjectionGetSearch": "sqli_1.php"
+  "sqlInjectionGetSearch": "sqli_1.php",
+  "sqlInjectionGetSelect": "sqli_2.php"
 }

@@ -26,13 +26,6 @@ export class HTMLInjection {
     return [newValue, heading];
   }
 
-  async updateParam(parameter, newValue) {
-    let currentURLStr = await this.page.url();
-    let currentURL = new URL(currentURLStr);
-    currentURL.searchParams.set(parameter, await newValue);
-    return currentURL.toString();
-  }
-
   async verifyURLInjections({
     firstName = generalFunctions.generateRandomString(10),
     lastName = generalFunctions.generateRandomString(10),
@@ -45,7 +38,10 @@ export class HTMLInjection {
       await this.goButton.click();
     }
     let wrappedFirstName = await this.wrapHeading(await firstName);
-    let newURL = await this.updateParam(parameter, wrappedFirstName[0]);
+    let newURL = await generalFunctions.updateParam(
+      parameter,
+      wrappedFirstName[0]
+    );
     await this.page.goto(newURL);
     if (
       await this.page
