@@ -8,7 +8,7 @@ test.describe("HTML injection - Reflected (GET)", () => {
     page = wpage;
     await login.loginUser({});
     await page.goto(
-      `${process.env.BASE_URL}${pages.htmlInjectionReflectedGet}`
+      `${process.env.BASE_URL}${pages.defaultPages.htmlInjectionReflectedGet}`
     );
   });
 
@@ -26,7 +26,7 @@ test.describe("HTML injection - Reflected (POST)", () => {
     page = wpage;
     await login.loginUser({});
     await page.goto(
-      `${process.env.BASE_URL}${pages.htmlInjectionReflectedPost}`
+      `${process.env.BASE_URL}${pages.defaultPages.htmlInjectionReflectedPost}`
     );
   });
 
@@ -39,7 +39,9 @@ test.describe("HTML injection - Stored", () => {
   test.beforeEach(async ({ wpage, login }) => {
     page = wpage;
     await login.loginUser({});
-    await page.goto(`${process.env.BASE_URL}${pages.htmlInjectionStored}`);
+    await page.goto(
+      `${process.env.BASE_URL}${pages.defaultPages.htmlInjectionStored}`
+    );
   });
 
   test("Low security, Stored", async ({ htmlInjection }) => {

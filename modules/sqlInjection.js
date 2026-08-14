@@ -1,7 +1,9 @@
 import { GeneralFunctions } from "./generalFunctions";
 import { log } from "../modules/base";
 import messages from "../fixtures/messages.json";
+import pages from "../fixtures/pages.json";
 import sqlPatterns from "../fixtures/sqlInjectionPatterns.json";
+import picocolors from "picocolors";
 
 let generalFunctions;
 
@@ -20,70 +22,71 @@ export class SQLInjection {
     for (const pattern of patterns) {
       await this.movieSearchField.fill(pattern);
       await this.searchButton.click();
-      let tableRows = await this.movieTable.locator("tr").all();
-
-      // If the message for no movies available is visible then there are no SQL injections to be found
-      if (
-        await this.movieTable
-          .locator(`td:has-text('${messages.noMoviesAvailable}')`)
-          .isVisible()
-      )
-        log.plain("No SQL Injection error found for this pattern");
-      // If the table grows by some rows it means a request went through, which is worth investigating
-      else if ((await tableRows.length) > 2)
-        log.warn(
-          "Possible SQL Injection issue found for the following pattern\n" +
-            pattern +
-            "\n" +
-            "please review manually"
-        );
-      /* If the table doesn't change but no 'No movies' message is found that means some other error 
-        (possibly relating to SQL) is visible, alo worth investigating */ else {
-        log.info(
-          "Possible error relating to SQL found for the following pattern\n" +
-            pattern +
-            "\n" +
-            "please review manually"
-        );
-      }
+      await this.verifyMovieTableErrorMessages(pattern);
     }
   }
 
   async verifyURLInjections({
     patterns = sqlPatterns.injectionsForGetInt,
     parameter = "movie",
-    submitValid = true,
+    submitValid = pages.validGETRequestPages.getSelectValidOption,
   }) {
-    if (submitValid) {
-      // await this.movieSelectField.click({ force: true });
-      // await this.movieSelectField.locator("option").nth(0).click();
-      await this.goButton.click();
-    }
+    if (submitValid)
+      await this.page.goto(`${process.env.BASE_URL}${submitValid}`);
     for (const pattern of patterns) {
       let newURL = await generalFunctions.updateParam(parameter, pattern);
       await this.page.goto(newURL);
-
-      // If the message for no movies available is visible then there are no SQL injections to be found
-      if (
-        await this.movieTable
-          .locator(`td:has-text('${messages.noMoviesAvailable}')`)
-          .isVisible()
-      )
-        log.plain("No SQL Injection error found for this pattern");
-      else if (await this.movieTable.locator("a").nth(0).isVisible())
-        log.warn(
-          "Possible SQL Injection issue found for the following pattern\n" +
-            pattern +
-            "\n" +
-            "please review manually"
-        );
-      else
-        log.info(
-          "Possible error relating to SQL found for the following pattern\n" +
-            pattern +
-            "\n" +
-            "please review manually"
-        );
+      await this.verifyMovieTableErrorMessages(pattern);
     }
+  }
+
+  async verifyMovieTableErrorMessages(pattern) {
+    const border = "=".repeat(60);
+
+    // If the 'No movies available' message is shown then there is no SQL injections available for that pattern
+    if (
+      await this.movieTable
+        .locator(`td:has-text('${messages.noMoviesAvailable}')`)
+        .isVisible()
+    )
+      log.plain("No SQL Injection error found for this pattern");
+    /* If the pattern returns a movie in the table that means there was an SQL injection 
+       and the test should be carefully reviewd manually */ else if (
+      await this.movieTable.locator("a").nth(0).isVisible()
+    )
+      log.warn(
+        "\n" +
+          picocolors.yellow(`${border}`) +
+          "\n" +
+          "\n" +
+          `  ⚠  ${picocolors.bold(
+            "Possible SQL Injection issue found for the following pattern"
+          )}\n` +
+          "\n" +
+          `    ${picocolors.magenta(pattern)}\n` +
+          "\n" +
+          `  ${picocolors.dim("Please review test manually.")}\n` +
+          "\n" +
+          picocolors.yellow(`${border}`) +
+          "\n"
+      );
+    /* If neiter case happened that means the pattern didn't return an error message, but also didn't return any movies, 
+       meaning a possible unrelated error (may be an error regarding SQL) happened, worth invesigating closer */ else
+      log.info(
+        "\n" +
+          picocolors.cyan(`${border}`) +
+          "\n" +
+          "\n" +
+          `  ⚠  ${picocolors.bold(
+            "Possible error relating to SQL found for the following pattern"
+          )}\n` +
+          "\n" +
+          `    ${picocolors.magenta(pattern)}\n` +
+          "\n" +
+          `  ${picocolors.dim("Consider reviewing test manually.")}\n` +
+          "\n" +
+          picocolors.cyan(`${border}`) +
+          "\n"
+      );
   }
 }

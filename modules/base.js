@@ -40,6 +40,7 @@ const colors = {
   yellow: "\x1b[33m",
   red: "\x1b[31m",
   white: "\x1b[37m",
+  cyan: "\x1b[36m",
   reset: "\x1b[0m",
 };
 
@@ -53,12 +54,9 @@ function writePlain(message) {
 
 export const log = {
   success: (msg) => write("[SUCCESS]", msg, colors.green),
-
   warn: (msg) => write("[WARNING]", msg, colors.yellow),
-
   error: (msg) => write("[ERROR]", msg, colors.red),
-
-  info: (msg) => write("[INFO]", msg, colors.white),
+  info: (msg) => write("[INFO]", msg, colors.cyan),
   plain: (msg) => writePlain(msg),
 };
 export const test = testPages;
