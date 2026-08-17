@@ -23,10 +23,21 @@ export class Login {
     password = users.defaultUser.password,
     goToPage = true,
     success = true,
+    securityLevel = "low",
   }) {
     if (goToPage) await this.page.goto(`${process.env.BASE_URL}login.php`);
     await this.loginField.fill(await username);
     await this.passwordField.fill(await password);
+    switch (securityLevel) {
+      case "low":
+        break;
+      case "medium":
+        await this.securityLevelBox.selectOption("1");
+        break;
+      case "high":
+        await this.securityLevelBox.selectOption("2");
+        break;
+    }
     await this.loginButton.click();
     switch (success) {
       case true:
