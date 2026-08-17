@@ -64,11 +64,18 @@ export class Login {
 
   async verifyLoginPageInjections({
     patterns = sqlPatterns.injectionsForGetString,
-    username = "neo",
+    username,
   }) {
     for (const pattern of patterns) {
-      await this.loginField.fill(await username);
-      await this.passwordField.fill(await pattern);
+      if (username) {
+        await this.loginField.fill(await username);
+        await this.passwordField.fill(await pattern);
+      } else {
+        await this.loginField.fill(await pattern);
+        await this.passwordField.fill(
+          await generalFunctions.generateRandomString(10)
+        );
+      }
       await this.loginButton.click();
       await this.verifyLoginPageErrors(pattern);
     }

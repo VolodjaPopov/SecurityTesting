@@ -6,7 +6,8 @@
     "sqlInjectionGetSearch": "sqli_1.php",
     "sqlInjectionGetSelect": "sqli_2.php",
     "sqlInjectionPostSearch": "sqli_6.php",
-    "loginHero": "sqli_3.php"
+    "loginHero": "sqli_3.php",
+    "loginUser": "sqli_16.php"
   },
   "validGETRequestPages": {
     "getSearchValidOption": "sqli_1.php?title=Terminator+Salvation&action=search",

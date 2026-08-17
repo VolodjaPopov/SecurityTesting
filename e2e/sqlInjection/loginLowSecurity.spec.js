@@ -12,5 +12,12 @@ test.describe("SQL Injection tests", () => {
   test("Login Form - Hero", async ({ login }) => {
     await page.goto(`${process.env.BASE_URL}${pages.defaultPages.loginHero}`);
     await login.verifyLoginPageInjections({});
+    await login.verifyLoginPageInjections({ username: "neo" });
+  });
+
+  test("Login Form - User", async ({ login }) => {
+    await page.goto(`${process.env.BASE_URL}${pages.defaultPages.loginUser}`);
+    await login.verifyLoginPageInjections({});
+    await login.verifyLoginPageInjections({ username: "neo" });
   });
 });
