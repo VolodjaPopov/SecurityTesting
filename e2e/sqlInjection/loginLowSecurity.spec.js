@@ -1,23 +1,38 @@
 import { test } from "../../modules/base";
 import pages from "../../fixtures/pages.json";
 
-let page;
-
-test.describe("SQL Injection tests", () => {
-  test.beforeEach(async ({ wpage, login }) => {
-    page = wpage;
-    await login.loginUser({});
+test.describe("SQL Injection login tests (Low security)", () => {
+  test.beforeEach(async ({ login }) => {
+    await test.step("Log in with low security", async () => {
+      await login.loginUser({});
+    });
   });
 
-  test("Login Form - Hero", async ({ login }) => {
-    await page.goto(`${process.env.BASE_URL}${pages.defaultPages.loginHero}`);
-    await login.verifyLoginPageInjections({});
-    await login.verifyLoginPageInjections({ username: "neo" });
+  test("Login Form - Hero", async ({ generalFunctions, login }) => {
+    await test.step("Go to the 'Login Form/Hero' page", async () => {
+      await generalFunctions.visitPage(pages.defaultPages.loginHero);
+    });
+
+    await test.step("Verify and log SQL injections for username field (with random password)", async () => {
+      await login.verifyLoginPageInjections({});
+    });
+
+    await test.step("Verify and log SQL injections for password field (with valid username)", async () => {
+      await login.verifyLoginPageInjections({ username: "neo" });
+    });
   });
 
-  test("Login Form - User", async ({ login }) => {
-    await page.goto(`${process.env.BASE_URL}${pages.defaultPages.loginUser}`);
-    await login.verifyLoginPageInjections({});
-    await login.verifyLoginPageInjections({ username: "neo" });
+  test("Login Form - User", async ({ generalFunctions, login }) => {
+    await test.step("Go to the 'Login Form/User' page", async () => {
+      await generalFunctions.visitPage(pages.defaultPages.loginUser);
+    });
+
+    await test.step("Verify and log SQL injections for username field (with random password)", async () => {
+      await login.verifyLoginPageInjections({});
+    });
+
+    await test.step("Verify and log SQL injections for password field (with valid username)", async () => {
+      await login.verifyLoginPageInjections({ username: "bee" });
+    });
   });
 });

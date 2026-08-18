@@ -50,4 +50,8 @@ export class GeneralFunctions {
     currentURL.searchParams.set(parameter, await newValue);
     return currentURL.toString();
   }
+
+  async visitPage(pageToVisit) {
+    await this.page.goto(pageToVisit);
+  }
 }

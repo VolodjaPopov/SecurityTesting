@@ -31,8 +31,7 @@ export class SQLInjection {
     parameter = "movie",
     submitValid = pages.validGETRequestPages.getSelectValidOption,
   }) {
-    if (submitValid)
-      await this.page.goto(`${process.env.BASE_URL}${submitValid}`);
+    if (submitValid) await this.page.goto(submitValid);
     for (const pattern of patterns) {
       let newURL = await generalFunctions.updateParam(parameter, pattern);
       await this.page.goto(newURL);

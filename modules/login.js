@@ -29,7 +29,7 @@ export class Login {
     success = true,
     securityLevel = "low",
   }) {
-    if (goToPage) await this.page.goto(`${process.env.BASE_URL}login.php`);
+    if (goToPage) await this.page.goto("login.php");
     await this.loginField.fill(await username);
     await this.passwordField.fill(await password);
     switch (securityLevel) {
