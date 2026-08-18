@@ -17,7 +17,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
     });
 
     await test.step("Verify and log SQL injections for the 'Search movies' field", async () => {
-      await sqlInjection.verifySearchField();
+      await sqlInjection.verifySearchField({});
     });
   });
 
@@ -48,7 +48,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
     });
 
     await test.step("Verify and log SQL injections for the 'Search movies' field", async () => {
-      await sqlInjection.verifySearchField();
+      await sqlInjection.verifySearchField({});
     });
   });
 
@@ -61,6 +61,16 @@ test.describe("SQL Injection tests (Low Security)", () => {
 
     await test.step("Verify and log SQL injections using the URL", async () => {
       await sqlInjection.verifyURLInjections({});
+    });
+  });
+
+  test("Blind Boolean", async ({ generalFunctions, sqlInjection }) => {
+    await test.step("Go to the 'SQL Injection POST/Search' page", async () => {
+      await generalFunctions.visitPage(pages.defaultPages.sqlInjectionBoolean);
+    });
+
+    await test.step("Verify and log SQL injections for the 'Search movies' field", async () => {
+      await sqlInjection.verifySearchField({ messagesToCheck: "boolean" });
     });
   });
 });

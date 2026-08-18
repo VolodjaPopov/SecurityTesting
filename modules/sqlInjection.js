@@ -18,11 +18,21 @@ export class SQLInjection {
     this.movieTable = page.locator('[id="table_yellow"]');
   }
 
-  async verifySearchField(patterns = sqlPatterns.injectionsForGetString) {
+  async verifySearchField({
+    patterns = sqlPatterns.injectionsForGetString,
+    messagesToCheck = "table",
+  }) {
     for (const pattern of patterns) {
       await this.movieSearchField.fill(pattern);
       await this.searchButton.click();
-      await this.verifyMovieTableErrorMessages(pattern);
+      switch (messagesToCheck) {
+        case "table":
+          await this.verifyMovieTableErrorMessages(pattern);
+          break;
+        case "boolean":
+          await this.verifyMovieBooleanMessages(pattern);
+          break;
+      }
     }
   }
 
@@ -39,9 +49,47 @@ export class SQLInjection {
     }
   }
 
-  async verifyMovieTableErrorMessages(pattern) {
+  async writeSQLWarningMessage(pattern) {
     const border = "=".repeat(60);
+    log.warn(
+      "\n" +
+        picocolors.yellow(`${border}`) +
+        "\n" +
+        "\n" +
+        `  ⚠  ${picocolors.bold(
+          "Possible SQL Injection issue found for the following pattern"
+        )}\n` +
+        "\n" +
+        `    ${picocolors.magenta(pattern)}\n` +
+        "\n" +
+        `  ${picocolors.dim("Please review test manually.")}\n` +
+        "\n" +
+        picocolors.yellow(`${border}`) +
+        "\n"
+    );
+  }
 
+  async writeSQLCautionMessage(pattern) {
+    const border = "=".repeat(60);
+    log.caution(
+      "\n" +
+        picocolors.cyan(`${border}`) +
+        "\n" +
+        "\n" +
+        `  ⚠  ${picocolors.bold(
+          "Possible error relating to SQL found for the following pattern"
+        )}\n` +
+        "\n" +
+        `    ${picocolors.magenta(pattern)}\n` +
+        "\n" +
+        `  ${picocolors.dim("Consider reviewing test manually.")}\n` +
+        "\n" +
+        picocolors.cyan(`${border}`) +
+        "\n"
+    );
+  }
+
+  async verifyMovieTableErrorMessages(pattern) {
     // If the 'No movies available' message is shown then there is no SQL injections available for that pattern
     if (
       await this.movieTable
@@ -53,39 +101,27 @@ export class SQLInjection {
        and the test should be carefully reviewd manually */ else if (
       await this.movieTable.locator("a").nth(0).isVisible()
     )
-      log.warn(
-        "\n" +
-          picocolors.yellow(`${border}`) +
-          "\n" +
-          "\n" +
-          `  ⚠  ${picocolors.bold(
-            "Possible SQL Injection issue found for the following pattern"
-          )}\n` +
-          "\n" +
-          `    ${picocolors.magenta(pattern)}\n` +
-          "\n" +
-          `  ${picocolors.dim("Please review test manually.")}\n` +
-          "\n" +
-          picocolors.yellow(`${border}`) +
-          "\n"
-      );
+      await this.writeSQLWarningMessage(pattern);
     /* If neiter case happened that means the pattern didn't return an error message, but also didn't return any movies, 
        meaning a possible unrelated error (may be an error regarding SQL) happened, worth invesigating closer */ else
-      log.caution(
-        "\n" +
-          picocolors.cyan(`${border}`) +
-          "\n" +
-          "\n" +
-          `  ⚠  ${picocolors.bold(
-            "Possible error relating to SQL found for the following pattern"
-          )}\n` +
-          "\n" +
-          `    ${picocolors.magenta(pattern)}\n` +
-          "\n" +
-          `  ${picocolors.dim("Consider reviewing test manually.")}\n` +
-          "\n" +
-          picocolors.cyan(`${border}`) +
-          "\n"
-      );
+      await this.writeSQLCautionMessage(pattern);
+  }
+
+  async verifyMovieBooleanMessages(pattern) {
+    // If the 'This movie doesn't exist' message is shown then there is no SQL injections available for that pattern
+    if (
+      await this.page
+        .locator(`#main:has-text('${messages.movieDoesntExist}')`)
+        .isVisible()
+    )
+      log.info("No SQL Injection error found for this pattern");
+    /* If the pattern returns a 'This movie exists' message that means there was an SQL injection 
+       and the test should be carefully reviewd manually */ else if (
+      await this.page
+        .locator(`#main:has-text('${messages.movieExists}')`)
+        .isVisible()
+    )
+      await this.writeSQLWarningMessage(pattern);
+    else await this.writeSQLCautionMessage(pattern);
   }
 }

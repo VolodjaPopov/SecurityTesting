@@ -4,5 +4,7 @@
   "sqlInjectionTrue": "The following field is vulnerable to SQL injections, broken by the following pattern:",
   "sqlInjectionFalse": "No SQL injections found for this field, consider manual testing for more accurate results",
   "noMoviesAvailable": "No movies were found!",
+  "movieExists": "The movie exists in our database!",
+  "movieDoesntExist": "The movie does not exist in our database!",
   "invalidCredentials": "Invalid credentials!"
 }
