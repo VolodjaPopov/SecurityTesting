@@ -49,7 +49,7 @@ export class SQLInjection {
         .locator(`td:has-text('${messages.noMoviesAvailable}')`)
         .isVisible()
     )
-      log.plain("No SQL Injection error found for this pattern");
+      log.info("No SQL Injection error found for this pattern");
     /* If the pattern returns a movie in the table that means there was an SQL injection 
        and the test should be carefully reviewd manually */ else if (
       await this.movieTable.locator("a").nth(0).isVisible()
@@ -72,7 +72,7 @@ export class SQLInjection {
       );
     /* If neiter case happened that means the pattern didn't return an error message, but also didn't return any movies, 
        meaning a possible unrelated error (may be an error regarding SQL) happened, worth invesigating closer */ else
-      log.info(
+      log.caution(
         "\n" +
           picocolors.cyan(`${border}`) +
           "\n" +

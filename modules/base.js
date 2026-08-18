@@ -56,7 +56,8 @@ export const log = {
   success: (msg) => write("[SUCCESS]", msg, colors.green),
   warn: (msg) => write("[WARNING]", msg, colors.yellow),
   error: (msg) => write("[ERROR]", msg, colors.red),
-  info: (msg) => write("[INFO]", msg, colors.cyan),
+  caution: (msg) => write("[CAUTION]", msg, colors.cyan),
+  info: (msg) => write("[INFO]", msg, colors.white),
   plain: (msg) => writePlain(msg),
 };
 export const test = testPages;
