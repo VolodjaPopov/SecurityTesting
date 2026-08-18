@@ -21,8 +21,16 @@ export class HTMLInjection {
     this.table = page.locator('[id="table_yellow"]');
   }
 
-  async wrapHeading(value, heading = "h1") {
-    let newValue = `<${heading}> ${value} </${heading}>`;
+  async wrapHeading({ value, heading = "h1", encoded = false }) {
+    let newValue;
+    switch (encoded) {
+      case true:
+        newValue = `%3C${heading}%3E ${value} $3C%2F${heading}%3E`;
+        break;
+      case false:
+        newValue = `<${heading}> ${value} </${heading}>`;
+        break;
+    }
     return [newValue, heading];
   }
 
@@ -31,13 +39,17 @@ export class HTMLInjection {
     lastName = generalFunctions.generateRandomString(10),
     parameter = "firstname",
     submitValid = true,
+    encoded = false,
   }) {
     if (submitValid) {
       await this.firstName.fill(await firstName);
       await this.lastName.fill(await lastName);
       await this.goButton.click();
     }
-    let wrappedFirstName = await this.wrapHeading(await firstName);
+    let wrappedFirstName = await this.wrapHeading({
+      value: await firstName,
+      encoded,
+    });
     let newURL = await generalFunctions.updateParam(
       parameter,
       wrappedFirstName[0]
@@ -57,10 +69,14 @@ export class HTMLInjection {
     firstName = generalFunctions.generateRandomString(10),
     lastName = generalFunctions.generateRandomString(10),
     expectedInjection = "heading",
+    encoded = false,
   }) {
     switch (expectedInjection) {
       case "heading":
-        let wrappedFirstName = await this.wrapHeading(await firstName);
+        let wrappedFirstName = await this.wrapHeading({
+          value: await firstName,
+          encoded,
+        });
         await this.firstName.fill(wrappedFirstName[0]);
         await this.lastName.fill(await lastName);
         await this.goButton.click();
@@ -78,8 +94,9 @@ export class HTMLInjection {
 
   async verifyTableEntryInjection({
     value = generalFunctions.generateRandomString(10),
+    encoded = false,
   }) {
-    let wrappedValue = await this.wrapHeading(await value);
+    let wrappedValue = await this.wrapHeading({ value: await value, encoded });
     await this.tableEntry.fill(wrappedValue[0]);
     await this.tableSubmitButton.click();
     if (
