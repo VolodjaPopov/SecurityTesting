@@ -73,4 +73,14 @@ test.describe("SQL Injection tests (Low Security)", () => {
       await sqlInjection.verifySearchField({ messagesToCheck: "boolean" });
     });
   });
+
+  test("Stored (Blog)", async ({ generalFunctions, htmlInjection }) => {
+    await test.step("Go to the 'SQL Injection - Stored (Blog) page", async () => {
+      await generalFunctions.visitPage(pages.defaultPages.sqlInjectionBlog);
+    });
+
+    await test.step("Verify and log HTML Injections for the table", async () => {
+      await htmlInjection.verifyInjectedWriteScriptInTable({});
+    });
+  });
 });

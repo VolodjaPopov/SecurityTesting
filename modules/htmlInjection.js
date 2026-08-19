@@ -1,6 +1,7 @@
 import { GeneralFunctions } from "./generalFunctions";
 import { log } from "./base";
 import messages from "../fixtures/messages.json";
+import htmlPatterns from "../fixtures/htmlInjectionPatterns.json";
 
 let generalFunctions;
 
@@ -12,26 +13,26 @@ export class HTMLInjection {
     this.lastName = page.locator('[id="lastname"]');
     this.goButton = page.locator('button[value="submit"]:has-text("Go")');
     this.tableEntry = page.locator('[id="entry"]');
-    this.tableSubmitButton = page.locator(
-      'button[value="submit"]:has-text("Submit")'
-    );
+    this.tableSubmitButton = page
+      .locator('button[value="submit"]:has-text("Submit")')
+      .or(page.locator('button[value="add"]:has-text("Add Entry")'));
     this.addEntryButton = page.locator('[id="entry_add"]');
     this.allEntriesButton = page.locator('[id="entry_all"]');
     this.deleteEntryButton = page.locator('[id="entry_delete"]');
     this.table = page.locator('[id="table_yellow"]');
   }
 
-  async wrapHeading({ value, heading = "h1", encoded = false }) {
+  async wrapHeading({ value, tag = "h1", encoded = false }) {
     let newValue;
     switch (encoded) {
       case true:
-        newValue = `%3C${heading}%3E ${value} $3C%2F${heading}%3E`;
+        newValue = `%3C${tag}%3E ${value} $3C%2F${tag}%3E`;
         break;
       case false:
-        newValue = `<${heading}> ${value} </${heading}>`;
+        newValue = `<${tag}> ${value} </${tag}>`;
         break;
     }
-    return [newValue, heading];
+    return [newValue, tag];
   }
 
   async verifyURLInjections({
@@ -107,5 +108,40 @@ export class HTMLInjection {
       log.warn(messages.htmlInjectionTrue);
       log.plain(wrappedValue[0]);
     } else log.info(messages.htmlInjectionFalse);
+  }
+
+  async verifyInjectedWriteScriptInTable({
+    value = htmlPatterns.scripts.writeLine,
+    encoded = false,
+  }) {
+    let rowsBefore = await generalFunctions.countLocators(
+      await this.table.locator("tr")
+    );
+    let wrappedValue = await this.wrapHeading({
+      value: await value,
+      tag: "script",
+      encoded,
+    });
+    await this.tableEntry.fill(wrappedValue[0]);
+    await this.tableSubmitButton.click();
+    let quotedValue = await generalFunctions.extractQuotedValue(value);
+    let rowsAfter = await generalFunctions.countLocators(
+      await this.table.locator("tr")
+    );
+
+    if (rowsAfter == rowsBefore + 1) {
+      let lastRow = await this.table.locator("tr").last();
+      let lastRowText = await lastRow.textContent();
+      if (
+        (await lastRowText.includes(quotedValue)) &&
+        !(await lastRowText.includes("script"))
+      )
+        log.warn(messages.htmlInjectionTrue);
+      else {
+        log.info(messages.htmlInjectionFalse);
+      }
+    } else {
+      log.caution("Caution");
+    }
   }
 }

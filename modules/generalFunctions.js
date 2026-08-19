@@ -54,4 +54,14 @@ export class GeneralFunctions {
   async visitPage(pageToVisit) {
     await this.page.goto(pageToVisit);
   }
+
+  async countLocators(locator) {
+    let numberOfElements = await locator.count();
+    return numberOfElements;
+  }
+
+  async extractQuotedValue(value) {
+    const match = value.match(/["']([^"']*)["']/);
+    return match ? match[1] : null;
+  }
 }
