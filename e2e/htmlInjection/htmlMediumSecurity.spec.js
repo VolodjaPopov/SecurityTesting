@@ -1,5 +1,6 @@
 import { test } from "../../modules/base";
 import pages from "../../fixtures/pages.json";
+import htmlPatterns from "../../fixtures/htmlInjectionPatterns.json";
 
 test.describe("HTML Injection tests (Medium security)", () => {
   test.beforeEach(async ({ login }) => {
@@ -62,14 +63,26 @@ test.describe("HTML Injection tests (Medium security)", () => {
     });
   });
 
-  // There is an issue with bWAPP where medium security is like high for this page, terefore this test is commented out
+  /* There is an issue with bWAPP where medium security is the same as high for this page.
+     This test will then insted show that basic (and even advanced) injection patterns do not work for this level. */
 
-  // test("Stored (Blog)", async ({ generalFunctions, htmlInjection }) => {
-  //   await test.step("Go to the 'HTML Injection Reflected (POST)' page", async () => {
-  //     await generalFunctions.visitPage(pages.defaultPages.htmlInjectionStored);
-  //   });
+  test("Stored (Blog)", async ({ generalFunctions, htmlInjection }) => {
+    await test.step("Go to the 'HTML Injection Reflected (POST)' page", async () => {
+      await generalFunctions.visitPage(pages.defaultPages.htmlInjectionStored);
+    });
 
-  //   await htmlInjection.verifyTableEntryInjection({});
-  //   await htmlInjection.verifyTableEntryInjection({ encoded: true });
-  // });
+    await test.step("Attempt to inject html div", async () => {
+      await htmlInjection.verifyTableEntryInjection({});
+    });
+
+    await test.step("Attempt to inject HTML script", async () => {
+      await htmlInjection.verifyInjectedWriteScriptInTable({});
+    });
+
+    await test.step("Attempt more advanced Injections", async () => {
+      for (const pattern of htmlPatterns.withWrapping.scriptsArr) {
+        await htmlInjection.verifyInjectionsInTableNoWrapping(pattern);
+      }
+    });
+  });
 });

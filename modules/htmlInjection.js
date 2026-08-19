@@ -111,7 +111,7 @@ export class HTMLInjection {
   }
 
   async verifyInjectedWriteScriptInTable({
-    value = htmlPatterns.scripts.writeLine,
+    value = htmlPatterns.noWrapping.scripts.writeLine,
     encoded = false,
   }) {
     let rowsBefore = await generalFunctions.countLocators(
@@ -143,5 +143,15 @@ export class HTMLInjection {
     } else {
       log.caution("Caution");
     }
+  }
+
+  async verifyInjectionsInTableNoWrapping(pattern) {
+    await this.tableEntry.fill(pattern);
+    await this.tableSubmitButton.click();
+    let lastRow = await this.table.locator("tr").last();
+    let lastRowText = await lastRow.textContent();
+    if (await lastRowText.includes(pattern))
+      log.info(messages.htmlInjectionFalse);
+    else log.caution("Caution");
   }
 }

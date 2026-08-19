@@ -1,5 +1,16 @@
 {
-  "scripts": {
-    "writeLine": "document.write(\"Hello\")"
+  "noWrapping": {
+    "scripts": {
+      "writeLine": "document.write(\"Hello\")"
+    }
+  },
+  "withWrapping": {
+    "scriptsArr": [
+      "</TITLE><SCRIPT>alert(\"XSS\");</SCRIPT>",
+      "<BODY BACKGROUND=\"javascript:alert('XSS')\">",
+      "<IMG DYNSRC=\"javascript:alert('XSS')\">",
+      "<IMG LOWSRC=\"javascript:alert('XSS')\">",
+      "</td><script>alert(\"Hi\")</script><!--"
+    ]
   }
 }
