@@ -124,4 +124,28 @@ export class SQLInjection {
       await this.writeSQLWarningMessage(pattern);
     else await this.writeSQLCautionMessage(pattern);
   }
+
+  async interceptAndModifyPostRequest({
+    appPage = "sqli_13.php",
+    optionToReplace = "4",
+    fieldToReplace = "movie=",
+    requestToInject = "99 or 1=1-- ",
+  }) {
+    await this.page.route(appPage, async (route, request) => {
+      const postData = request.postData() || "";
+      const newPostData = postData.replace(
+        `${fieldToReplace}${optionToReplace}`,
+        `${fieldToReplace}${requestToInject}`
+      );
+
+      await route.continue({
+        postData: newPostData,
+      });
+    });
+  }
+
+  async selectMovieOption(option = "4") {
+    await this.movieSelectField.selectOption(option);
+    await this.goButton.click();
+  }
 }
