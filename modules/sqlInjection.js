@@ -56,13 +56,9 @@ export class SQLInjection {
         picocolors.yellow(`${border}`) +
         "\n" +
         "\n" +
-        `  ⚠  ${picocolors.bold(
-          "Possible SQL Injection issue found for the following pattern"
-        )}\n` +
+        `  ⚠  ${picocolors.bold(messages.customMessages.sqlInjectionTrue)}\n` +
         "\n" +
         `    ${picocolors.magenta(pattern)}\n` +
-        "\n" +
-        `  ${picocolors.dim("Please review test manually.")}\n` +
         "\n" +
         picocolors.yellow(`${border}`) +
         "\n"
@@ -77,12 +73,10 @@ export class SQLInjection {
         "\n" +
         "\n" +
         `  ⚠  ${picocolors.bold(
-          "Possible error relating to SQL found for the following pattern"
+          messages.customMessages.sqlInjectionCautionMessage
         )}\n` +
         "\n" +
         `    ${picocolors.magenta(pattern)}\n` +
-        "\n" +
-        `  ${picocolors.dim("Consider reviewing test manually.")}\n` +
         "\n" +
         picocolors.cyan(`${border}`) +
         "\n"
@@ -93,10 +87,10 @@ export class SQLInjection {
     // If the 'No movies available' message is shown then there is no SQL injections available for that pattern
     if (
       await this.movieTable
-        .locator(`td:has-text('${messages.noMoviesAvailable}')`)
+        .locator(`td:has-text('${messages.appMessages.noMoviesAvailable}')`)
         .isVisible()
     )
-      log.info("No SQL Injection error found for this pattern");
+      log.info(messages.customMessages.sqlInjectionFalse);
     /* If the pattern returns a movie in the table that means there was an SQL injection 
        and the test should be carefully reviewd manually */ else if (
       await this.movieTable.locator("a").nth(0).isVisible()
@@ -111,14 +105,14 @@ export class SQLInjection {
     // If the 'This movie doesn't exist' message is shown then there is no SQL injections available for that pattern
     if (
       await this.page
-        .locator(`#main:has-text('${messages.movieDoesntExist}')`)
+        .locator(`#main:has-text('${messages.appMessages.movieDoesntExist}')`)
         .isVisible()
     )
-      log.info("No SQL Injection error found for this pattern");
+      log.info(messages.customMessages.sqlInjectionFalse);
     /* If the pattern returns a 'This movie exists' message that means there was an SQL injection 
        and the test should be carefully reviewd manually */ else if (
       await this.page
-        .locator(`#main:has-text('${messages.movieExists}')`)
+        .locator(`#main:has-text('${messages.appMessages.movieExists}')`)
         .isVisible()
     )
       await this.writeSQLWarningMessage(pattern);

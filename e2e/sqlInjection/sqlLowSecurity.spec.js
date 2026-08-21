@@ -1,6 +1,7 @@
-import { test } from "../../modules/base";
+import { log, test } from "../../modules/base";
 import sqlPatterns from "../../fixtures/sqlInjectionPatterns.json";
 import pages from "../../fixtures/pages.json";
+import messages from "../../fixtures/messages.json";
 
 test.describe("SQL Injection tests (Low Security)", () => {
   test.beforeEach(async ({ login }) => {
@@ -96,18 +97,22 @@ test.describe("SQL Injection tests (Low Security)", () => {
     });
 
     await test.step("Run the function to intercept and change the POST request which returns a movie", async () => {
-      await sqlInjection.interceptAndModifyPostRequest({});
+      await sqlInjection.interceptAndModifyPostRequest({
+        optionToReplace: "3",
+      });
     });
 
     await test.step("Select the movie for which the request will be intercepted", async () => {
-      await sqlInjection.selectMovieOption();
+      await sqlInjection.selectMovieOption("3");
     });
 
     await test.step("Verify the movie returned", async () => {
       let movieReturned = await sqlInjection.returnMovieTitleFromTable();
-      if (movieReturned === (await commonActions.convertMovieIdToTitle(4)))
-        console.log("No injection");
-      else console.log("YES injectio");
+      if (movieReturned === (await commonActions.convertMovieIdToTitle(3)))
+        log.info(messages.customMessages.sqlInjectionFalse);
+      else if (movieReturned === (await commonActions.convertMovieIdToTitle(1)))
+        log.warn(messages.customMessages.sqlInjectionInterceptedTrue);
+      else log.caution(messages.customMessages.sqlInjectionInterceptedCaution);
     });
   });
 });

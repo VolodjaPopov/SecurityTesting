@@ -1,10 +1,18 @@
 {
-  "htmlInjectionTrue": "The following field is vulnerable to HTML injections, broken by the following pattern:",
-  "htmlInjectionFalse": "No HTML injections found for this field, consider manual testing for more accurate results",
-  "sqlInjectionTrue": "The following field is vulnerable to SQL injections, broken by the following pattern:",
-  "sqlInjectionFalse": "No SQL injections found for this field, consider manual testing for more accurate results",
-  "noMoviesAvailable": "No movies were found!",
-  "movieExists": "The movie exists in our database!",
-  "movieDoesntExist": "The movie does not exist in our database!",
-  "invalidCredentials": "Invalid credentials!"
+  "appMessages": {
+    "noMoviesAvailable": "No movies were found!",
+    "movieExists": "The movie exists in our database!",
+    "movieDoesntExist": "The movie does not exist in our database!",
+    "invalidCredentials": "Invalid credentials!"
+  },
+  "customMessages": {
+    "htmlInjectionTrue": "The following field is vulnerable to HTML injections, broken by the following pattern. Please review test manually",
+    "htmlInjectionCautionMessage": "Possible error relating to HTML found for the following pattern, consider reviewing test manually",
+    "htmlInjectionFalse": "No HTML injections found for this field, consider manual testing for more accurate results",
+    "sqlInjectionTrue": "The following field is vulnerable to SQL injections, broken by the following pattern. Please review test manually",
+    "sqlInjectionCautionMessage": "Possible error relating to SQL found for the following pattern, consider reviewing test manually",
+    "sqlInjectionFalse": "No SQL injections found for this field, consider manual testing for more accurate results",
+    "sqlInjectionInterceptedTrue": "The following field is vulnerable to SQL Injection as it was broken by intercepting a request. Please review test manually",
+    "sqlInjectionInterceptedCaution": "Unexpected results after intercepting and modifying request, consider reviewing manually for accurate scope of the issue"
+  }
 }

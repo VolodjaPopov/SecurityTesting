@@ -61,9 +61,9 @@ export class HTMLInjection {
         .locator(`${wrappedFirstName[1]}:has-text('${await firstName}')`)
         .isVisible()
     ) {
-      log.warn(messages.htmlInjectionTrue);
+      log.warn(messages.customMessages.htmlInjectionTrue);
       log.plain(wrappedFirstName[0]);
-    } else log.info(messages.htmlInjectionFalse);
+    } else log.info(messages.customMessages.htmlInjectionFalse);
   }
 
   async verifyNameFields({
@@ -86,9 +86,9 @@ export class HTMLInjection {
             .locator(`${wrappedFirstName[1]}:has-text('${await firstName}')`)
             .isVisible()
         ) {
-          log.warn(messages.htmlInjectionTrue);
+          log.warn(messages.customMessages.htmlInjectionTrue);
           log.plain(wrappedFirstName[0]);
-        } else log.info(messages.htmlInjectionFalse);
+        } else log.info(messages.customMessages.htmlInjectionFalse);
         break;
     }
   }
@@ -105,9 +105,9 @@ export class HTMLInjection {
         .locator(`${wrappedValue[1]}:has-text('${await value}')`)
         .isVisible()
     ) {
-      log.warn(messages.htmlInjectionTrue);
+      log.warn(messages.customMessages.htmlInjectionTrue);
       log.plain(wrappedValue[0]);
-    } else log.info(messages.htmlInjectionFalse);
+    } else log.info(messages.customMessages.htmlInjectionFalse);
   }
 
   async verifyInjectedWriteScriptInTable({
@@ -136,12 +136,12 @@ export class HTMLInjection {
         (await lastRowText.includes(quotedValue)) &&
         !(await lastRowText.includes("script"))
       )
-        log.warn(messages.htmlInjectionTrue);
+        log.warn(messages.customMessages.htmlInjectionTrue);
       else {
-        log.info(messages.htmlInjectionFalse);
+        log.info(messages.customMessages.htmlInjectionFalse);
       }
     } else {
-      log.caution("Caution");
+      log.caution(messages.customMessages.htmlInjectionCautionMessage);
     }
   }
 
@@ -151,7 +151,7 @@ export class HTMLInjection {
     let lastRow = await this.table.locator("tr").last();
     let lastRowText = await lastRow.textContent();
     if (await lastRowText.includes(pattern))
-      log.info(messages.htmlInjectionFalse);
-    else log.caution("Caution");
+      log.info(messages.customMessages.htmlInjectionFalse);
+    else log.caution(messages.customMessages.htmlInjectionCautionMessage);
   }
 }

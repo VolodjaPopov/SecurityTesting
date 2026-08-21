@@ -4,14 +4,16 @@ import { log } from "./base";
 import users from "../fixtures/users.json";
 import messages from "../fixtures/messages.json";
 import sqlPatterns from "../fixtures/sqlInjectionPatterns.json";
-import picocolors from "picocolors";
+import { SQLInjection } from "./sqlInjection";
 
 let generalFunctions;
+let sqlInjection;
 
 export class Login {
   constructor(page) {
     this.page = page;
     generalFunctions = new GeneralFunctions(page);
+    sqlInjection = new SQLInjection(page);
     this.loginField = page.locator('[id="login"]');
     this.passwordField = page.locator('[id="password"]');
     this.securityLevelBox = page.locator('[name="security_level"]');
@@ -82,52 +84,20 @@ export class Login {
   }
 
   async verifyLoginPageErrors(pattern) {
-    const border = "=".repeat(60);
-
     // If the 'Invalid credentials' message is shown then there is no SQL injections available for that pattern
     if (
       await this.page
-        .locator(`font:has-text('${messages.invalidCredentials}')`)
+        .locator(`font:has-text('${messages.appMessages.invalidCredentials}')`)
         .isVisible()
     )
-      log.info("No SQL Injection error found for this pattern");
+      log.info(messages.customMessages.sqlInjectionFalse);
     /* If the pattern returns a movie in the table that means there was an SQL injection 
        and the test should be carefully reviewd manually */ else if (
       await this.page.locator("p:has-text('Your secret:')").isVisible()
     )
-      log.warn(
-        "\n" +
-          picocolors.yellow(`${border}`) +
-          "\n" +
-          "\n" +
-          `  ⚠  ${picocolors.bold(
-            "Possible SQL Injection issue found for the following pattern"
-          )}\n` +
-          "\n" +
-          `    ${picocolors.magenta(pattern)}\n` +
-          "\n" +
-          `  ${picocolors.dim("Please review test manually.")}\n` +
-          "\n" +
-          picocolors.yellow(`${border}`) +
-          "\n"
-      );
+      await sqlInjection.writeSQLWarningMessage(pattern);
     /* If neiter case happened that means the pattern didn't return an error message, but also didn't return any movies, 
        meaning a possible unrelated error (may be an error regarding SQL) happened, worth invesigating closer */ else
-      log.caution(
-        "\n" +
-          picocolors.cyan(`${border}`) +
-          "\n" +
-          "\n" +
-          `  ⚠  ${picocolors.bold(
-            "Possible error relating to SQL found for the following pattern"
-          )}\n` +
-          "\n" +
-          `    ${picocolors.magenta(pattern)}\n` +
-          "\n" +
-          `  ${picocolors.dim("Consider reviewing test manually.")}\n` +
-          "\n" +
-          picocolors.cyan(`${border}`) +
-          "\n"
-      );
+      await sqlInjection.writeSQLCautionMessage(pattern);
   }
 }
