@@ -83,4 +83,31 @@ test.describe("SQL Injection tests (Low Security)", () => {
       await htmlInjection.verifyInjectedWriteScriptInTable({});
     });
   });
+
+  test("Select POST", async ({
+    generalFunctions,
+    commonActions,
+    sqlInjection,
+  }) => {
+    await test.step("Go to the 'SQL Injection POST/Search' page", async () => {
+      await generalFunctions.visitPage(
+        pages.defaultPages.sqlInjectionPostSelect
+      );
+    });
+
+    await test.step("Run the function to intercept and change the POST request which returns a movie", async () => {
+      await sqlInjection.interceptAndModifyPostRequest({});
+    });
+
+    await test.step("Select the movie for which the request will be intercepted", async () => {
+      await sqlInjection.selectMovieOption();
+    });
+
+    await test.step("Verify the movie returned", async () => {
+      let movieReturned = await sqlInjection.returnMovieTitleFromTable();
+      if (movieReturned === (await commonActions.convertMovieIdToTitle(4)))
+        console.log("No injection");
+      else console.log("YES injectio");
+    });
+  });
 });

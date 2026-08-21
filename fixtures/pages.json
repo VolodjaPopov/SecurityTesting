@@ -8,6 +8,7 @@
     "sqlInjectionPostSearch": "sqli_6.php",
     "sqlInjectionBoolean": "sqli_4.php",
     "sqlInjectionBlog": "sqli_7.php",
+    "sqlInjectionPostSelect": "sqli_13.php",
     "loginHero": "sqli_3.php",
     "loginUser": "sqli_16.php"
   },

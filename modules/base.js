@@ -5,6 +5,7 @@ import { GeneralFunctions } from "./generalFunctions";
 import { Login } from "./login";
 import { HTMLInjection } from "./htmlInjection";
 import { SQLInjection } from "./sqlInjection";
+import { CommonActions } from "./commonActions";
 
 const testPages = baseTest.extend({
   wpage: [
@@ -23,6 +24,9 @@ const testPages = baseTest.extend({
   ],
   generalFunctions: async ({ wpage }, use) => {
     await use(new GeneralFunctions(wpage));
+  },
+  commonActions: async ({ wpage }, use) => {
+    await use(new CommonActions(wpage));
   },
   login: async ({ wpage }, use) => {
     await use(new Login(wpage));

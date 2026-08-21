@@ -148,4 +148,13 @@ export class SQLInjection {
     await this.movieSelectField.selectOption(option);
     await this.goButton.click();
   }
+
+  async returnMovieTitleFromTable(position = 1) {
+    return await this.movieTable
+      .locator("tr")
+      .nth(position)
+      .locator("td")
+      .nth(0)
+      .textContent();
+  }
 }
