@@ -63,6 +63,7 @@ export class HTMLInjection {
     ) {
       log.warn(messages.customMessages.htmlInjectionTrue);
       log.plain(wrappedFirstName[0]);
+      throw new Error(messages.customMessages.thrownError);
     } else log.info(messages.customMessages.htmlInjectionFalse);
   }
 
@@ -88,6 +89,7 @@ export class HTMLInjection {
         ) {
           log.warn(messages.customMessages.htmlInjectionTrue);
           log.plain(wrappedFirstName[0]);
+          throw new Error(messages.customMessages.thrownError);
         } else log.info(messages.customMessages.htmlInjectionFalse);
         break;
     }
@@ -107,6 +109,7 @@ export class HTMLInjection {
     ) {
       log.warn(messages.customMessages.htmlInjectionTrue);
       log.plain(wrappedValue[0]);
+      throw new Error(messages.customMessages.thrownError);
     } else log.info(messages.customMessages.htmlInjectionFalse);
   }
 
@@ -135,13 +138,15 @@ export class HTMLInjection {
       if (
         (await lastRowText.includes(quotedValue)) &&
         !(await lastRowText.includes("script"))
-      )
+      ) {
         log.warn(messages.customMessages.htmlInjectionTrue);
-      else {
+        throw new Error(messages.customMessages.thrownError);
+      } else {
         log.info(messages.customMessages.htmlInjectionFalse);
       }
     } else {
       log.caution(messages.customMessages.htmlInjectionCautionMessage);
+      throw new Error(messages.customMessages.thrownCautionError);
     }
   }
 
@@ -152,6 +157,9 @@ export class HTMLInjection {
     let lastRowText = await lastRow.textContent();
     if (await lastRowText.includes(pattern))
       log.info(messages.customMessages.htmlInjectionFalse);
-    else log.caution(messages.customMessages.htmlInjectionCautionMessage);
+    else {
+      log.caution(messages.customMessages.htmlInjectionCautionMessage);
+      throw new Error(messages.customMessages.thrownCautionError);
+    }
   }
 }

@@ -13,6 +13,8 @@
     "sqlInjectionCautionMessage": "Possible error relating to SQL found for the following pattern, consider reviewing test manually",
     "sqlInjectionFalse": "No SQL injections found for this field, consider manual testing for more accurate results",
     "sqlInjectionInterceptedTrue": "The following field is vulnerable to SQL Injection as it was broken by intercepting a request. Please review test manually",
-    "sqlInjectionInterceptedCaution": "Unexpected results after intercepting and modifying request, consider reviewing manually for accurate scope of the issue"
+    "sqlInjectionInterceptedCaution": "Unexpected results after intercepting and modifying request, consider reviewing manually for accurate scope of the issue",
+    "thrownError": "This test has failed because an Injection was found for the tested field. Review the logged test results and snapshot, and manually re-check the field",
+    "thrownCautionError": "This test failed because a possible Injection could be applied to this field. Please consult the log and screenshot to determine whether an injection possible, and re-check manually"
   }
 }
