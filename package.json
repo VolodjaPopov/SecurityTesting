@@ -6,7 +6,11 @@
   "directories": {
     "test": "tests"
   },
-  "scripts": {},
+  "scripts": {
+    "regressionSecurityTests": "npx playwright test --grep @security",
+    "regressionHTML": "npx playwright test --grep @htmlInjection",
+    "regressionSQL": "npx playwright test --grep @sqlInjection"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/VolodjaPopov/SecurityTesting.git"
