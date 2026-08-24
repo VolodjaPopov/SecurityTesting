@@ -8,31 +8,43 @@ test.describe("SQL Injection login tests (Low security)", () => {
     });
   });
 
-  test("Login Form - Hero", async ({ generalFunctions, login }) => {
-    await test.step("Go to the 'Login Form/Hero' page", async () => {
-      await generalFunctions.visitPage(pages.defaultPages.loginHero);
-    });
+  test(
+    "Login Form - Hero",
+    {
+      tag: ["@security", "@sqlInjection"],
+    },
+    async ({ generalFunctions, login }) => {
+      await test.step("Go to the 'Login Form/Hero' page", async () => {
+        await generalFunctions.visitPage(pages.defaultPages.loginHero);
+      });
 
-    await test.step("Verify and log SQL injections for username field (with random password)", async () => {
-      await login.verifyLoginPageInjections({});
-    });
+      await test.step("Verify and log SQL injections for username field (with random password)", async () => {
+        await login.verifyLoginPageInjections({});
+      });
 
-    await test.step("Verify and log SQL injections for password field (with valid username)", async () => {
-      await login.verifyLoginPageInjections({ username: "neo" });
-    });
-  });
+      await test.step("Verify and log SQL injections for password field (with valid username)", async () => {
+        await login.verifyLoginPageInjections({ username: "neo" });
+      });
+    }
+  );
 
-  test("Login Form - User", async ({ generalFunctions, login }) => {
-    await test.step("Go to the 'Login Form/User' page", async () => {
-      await generalFunctions.visitPage(pages.defaultPages.loginUser);
-    });
+  test(
+    "Login Form - User",
+    {
+      tag: ["@security", "@sqlInjection"],
+    },
+    async ({ generalFunctions, login }) => {
+      await test.step("Go to the 'Login Form/User' page", async () => {
+        await generalFunctions.visitPage(pages.defaultPages.loginUser);
+      });
 
-    await test.step("Verify and log SQL injections for username field (with random password)", async () => {
-      await login.verifyLoginPageInjections({});
-    });
+      await test.step("Verify and log SQL injections for username field (with random password)", async () => {
+        await login.verifyLoginPageInjections({});
+      });
 
-    await test.step("Verify and log SQL injections for password field (with valid username)", async () => {
-      await login.verifyLoginPageInjections({ username: "bee" });
-    });
-  });
+      await test.step("Verify and log SQL injections for password field (with valid username)", async () => {
+        await login.verifyLoginPageInjections({ username: "bee" });
+      });
+    }
+  );
 });

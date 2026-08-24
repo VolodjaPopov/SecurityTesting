@@ -8,55 +8,75 @@ test.describe("HTML Injection tests (Low security)", () => {
     });
   });
 
-  test("Reflected GET (Field entry)", async ({
-    generalFunctions,
-    htmlInjection,
-  }) => {
-    await test.step("Go to the 'HTML Injection Reflected (GET)' page", async () => {
-      await generalFunctions.visitPage(
-        pages.defaultPages.htmlInjectionReflectedGet
-      );
-    });
+  test(
+    "Reflected GET (Field entry)",
+    {
+      tag: ["@security", "@htmlInjection"],
+    },
+    async ({ generalFunctions, htmlInjection }) => {
+      await test.step("Go to the 'HTML Injection Reflected (GET)' page", async () => {
+        await generalFunctions.visitPage(
+          pages.defaultPages.htmlInjectionReflectedGet
+        );
+      });
 
-    await test.step("Verify and log HTML injections for this page (by entering injections into the 'first name' field)", async () => {
-      await htmlInjection.verifyNameFields({});
-    });
-  });
+      await test.step("Verify and log HTML injections for this page (by entering injections into the 'first name' field)", async () => {
+        await htmlInjection.verifyNameFields({});
+      });
+    }
+  );
 
-  test("Reflected GET (URL entry)", async ({
-    generalFunctions,
-    htmlInjection,
-  }) => {
-    await test.step("Go to the 'HTML Injection Reflected (GET)' page", async () => {
-      await generalFunctions.visitPage(
-        pages.defaultPages.htmlInjectionReflectedGet
-      );
-    });
+  test(
+    "Reflected GET (URL entry)",
+    {
+      tag: ["@security", "@htmlInjection"],
+    },
+    async ({ generalFunctions, htmlInjection }) => {
+      await test.step("Go to the 'HTML Injection Reflected (GET)' page", async () => {
+        await generalFunctions.visitPage(
+          pages.defaultPages.htmlInjectionReflectedGet
+        );
+      });
 
-    await test.step("Verify and log HTML injections for this page (by entering injections into the URL)", async () => {
-      await htmlInjection.verifyURLInjections({});
-    });
-  });
+      await test.step("Verify and log HTML injections for this page (by entering injections into the URL)", async () => {
+        await htmlInjection.verifyURLInjections({});
+      });
+    }
+  );
 
-  test("Reflected POST", async ({ generalFunctions, htmlInjection }) => {
-    await test.step("Go to the 'HTML Injection Reflected (POST)' page", async () => {
-      await generalFunctions.visitPage(
-        pages.defaultPages.htmlInjectionReflectedPost
-      );
-    });
+  test(
+    "Reflected POST",
+    {
+      tag: ["@security", "@htmlInjection"],
+    },
+    async ({ generalFunctions, htmlInjection }) => {
+      await test.step("Go to the 'HTML Injection Reflected (POST)' page", async () => {
+        await generalFunctions.visitPage(
+          pages.defaultPages.htmlInjectionReflectedPost
+        );
+      });
 
-    await test.step("Verify and log HTML injections for this page (by entering injections into the 'first name' field)", async () => {
-      await htmlInjection.verifyNameFields({});
-    });
-  });
+      await test.step("Verify and log HTML injections for this page (by entering injections into the 'first name' field)", async () => {
+        await htmlInjection.verifyNameFields({});
+      });
+    }
+  );
 
-  test("Stored (Blog)", async ({ generalFunctions, htmlInjection }) => {
-    await test.step("Go to the 'HTML Injection - Stored (Blog) page", async () => {
-      await generalFunctions.visitPage(pages.defaultPages.htmlInjectionStored);
-    });
+  test(
+    "Stored (Blog)",
+    {
+      tag: ["@security", "@htmlInjection"],
+    },
+    async ({ generalFunctions, htmlInjection }) => {
+      await test.step("Go to the 'HTML Injection - Stored (Blog) page", async () => {
+        await generalFunctions.visitPage(
+          pages.defaultPages.htmlInjectionStored
+        );
+      });
 
-    await test.step("Verify and log HTML Injections for the table", async () => {
-      await htmlInjection.verifyTableEntryInjection({});
-    });
-  });
+      await test.step("Verify and log HTML Injections for the table", async () => {
+        await htmlInjection.verifyTableEntryInjection({});
+      });
+    }
+  );
 });
