@@ -83,7 +83,7 @@ test.describe("HTML Injection tests (Medium security)", () => {
     {
       tag: ["@security", "@htmlInjection"],
     },
-    async ({ generalFunctions, htmlInjection }) => {
+    async ({ generalFunctions, commonActions, htmlInjection }) => {
       await test.step("Go to the 'HTML Injection Reflected (POST)' page", async () => {
         await generalFunctions.visitPage(
           pages.defaultPages.htmlInjectionStored
@@ -102,6 +102,10 @@ test.describe("HTML Injection tests (Medium security)", () => {
         for (const pattern of htmlPatterns.withWrapping.scriptsArr) {
           await htmlInjection.verifyInjectionsInTableNoWrapping(pattern);
         }
+      });
+
+      await test.step("Clear all entries", async () => {
+        await commonActions.clearBlogTable();
       });
     }
   );

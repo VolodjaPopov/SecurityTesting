@@ -3,7 +3,8 @@
     "noMoviesAvailable": "No movies were found!",
     "movieExists": "The movie exists in our database!",
     "movieDoesntExist": "The movie does not exist in our database!",
-    "invalidCredentials": "Invalid credentials!"
+    "invalidCredentials": "Invalid credentials!",
+    "allEntriesDeleted": "All your entries were deleted!"
   },
   "customMessages": {
     "htmlInjectionTrue": "The following field is vulnerable to HTML injections, broken by the following pattern. Please review test manually",
