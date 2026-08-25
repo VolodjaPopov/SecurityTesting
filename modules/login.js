@@ -79,7 +79,12 @@ export class Login {
         );
       }
       await this.loginButton.click();
-      await this.verifyLoginPageErrors(pattern);
+      /* The test will fail when the first pattern in the list can be used as an Injection
+         if no patterns can be injected the test will cycle through all of them, and log the appropriate messages. */
+      let result = await this.verifyLoginPageErrors(pattern);
+      if (result === "injection")
+        throw new Error(messages.customMessages.thrownError);
+      else if (result === "caution") expect.soft(result).toBe(false);
     }
   }
 
@@ -89,15 +94,21 @@ export class Login {
       await this.page
         .locator(`font:has-text('${messages.appMessages.invalidCredentials}')`)
         .isVisible()
-    )
+    ) {
       log.info(messages.customMessages.sqlInjectionFalse);
-    /* If the pattern returns a movie in the table that means there was an SQL injection 
-       and the test should be carefully reviewd manually */ else if (
+      return false;
+    } else if (
+      /* If the pattern returns a movie in the table that means there was an SQL injection 
+       and the test should be carefully reviewd manually */
       await this.page.locator("p:has-text('Your secret:')").isVisible()
-    )
+    ) {
       await sqlInjection.writeSQLWarningMessage(pattern);
-    /* If neiter case happened that means the pattern didn't return an error message, but also didn't return any movies, 
-       meaning a possible unrelated error (may be an error regarding SQL) happened, worth invesigating closer */ else
+      return "injection";
+    } else {
+      /* If neiter case happened that means the pattern didn't return an error message, but also didn't return any movies, 
+       meaning a possible unrelated error (may be an error regarding SQL) happened, worth invesigating closer */
       await sqlInjection.writeSQLCautionMessage(pattern);
+      return "caution";
+    }
   }
 }
