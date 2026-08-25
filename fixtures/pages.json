@@ -10,7 +10,9 @@
     "sqlInjectionBlog": "sqli_7.php",
     "sqlInjectionPostSelect": "sqli_13.php",
     "loginHero": "sqli_3.php",
-    "loginUser": "sqli_16.php"
+    "loginUser": "sqli_16.php",
+    "xssGet": "xss_get.php",
+    "xssPost": "xss_post.php"
   },
   "validGETRequestPages": {
     "getSearchValidOption": "sqli_1.php?title=Terminator+Salvation&action=search",

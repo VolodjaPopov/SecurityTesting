@@ -9,7 +9,8 @@
   "scripts": {
     "regressionSecurityTests": "npx playwright test --grep @security",
     "regressionHTML": "npx playwright test --grep @htmlInjection",
-    "regressionSQL": "npx playwright test --grep @sqlInjection"
+    "regressionSQL": "npx playwright test --grep @sqlInjection",
+    "regressionXSS": "npx playwright test --grep @xss"
   },
   "repository": {
     "type": "git",
