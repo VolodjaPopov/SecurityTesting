@@ -84,6 +84,7 @@ export class Login {
       let result = await this.verifyLoginPageErrors(pattern);
       if (result === "injection")
         throw new Error(messages.customMessages.thrownError);
+      // If a 'Caution' message is displayed the test will fail at the end, but will cycle through all the patterns
       else if (result === "caution") expect.soft(result).toBe(false);
     }
   }

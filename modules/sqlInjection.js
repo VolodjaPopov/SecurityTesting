@@ -1,5 +1,5 @@
 import { GeneralFunctions } from "./generalFunctions";
-import { log } from "../modules/base";
+import { expect, log } from "../modules/base";
 import messages from "../fixtures/messages.json";
 import pages from "../fixtures/pages.json";
 import sqlPatterns from "../fixtures/sqlInjectionPatterns.json";
@@ -27,10 +27,17 @@ export class SQLInjection {
       await this.searchButton.click();
       switch (messagesToCheck) {
         case "table":
-          await this.verifyMovieTableErrorMessages(pattern);
+          let result = await this.verifyMovieTableErrorMessages(pattern);
+          if (result === "injection")
+            throw new Error(messages.customMessages.thrownError);
+          else if (result === "caution") expect.soft(result).toBe(false);
           break;
         case "boolean":
-          await this.verifyMovieBooleanMessages(pattern);
+          let resultBool = await this.verifyMovieBooleanMessages(pattern);
+          if (resultBool === "injection")
+            throw new Error(messages.customMessages.thrownError);
+          else if (resultBool === "caution")
+            expect.soft(resultBool).toBe(false);
           break;
       }
     }
@@ -45,7 +52,10 @@ export class SQLInjection {
     for (const pattern of patterns) {
       let newURL = await generalFunctions.updateParam(parameter, pattern);
       await this.page.goto(newURL);
-      await this.verifyMovieTableErrorMessages(pattern);
+      let result = await this.verifyMovieTableErrorMessages(pattern);
+      if (result === "injection")
+        throw new Error(messages.customMessages.thrownError);
+      else if (result === "caution") expect.soft(result).toBe(false);
     }
   }
 
@@ -89,16 +99,20 @@ export class SQLInjection {
       await this.movieTable
         .locator(`td:has-text('${messages.appMessages.noMoviesAvailable}')`)
         .isVisible()
-    )
+    ) {
       log.info(messages.customMessages.sqlInjectionFalse);
-    /* If the pattern returns a movie in the table that means there was an SQL injection 
-       and the test should be carefully reviewd manually */ else if (
-      await this.movieTable.locator("a").nth(0).isVisible()
-    )
+      return false;
+    } else if (await this.movieTable.locator("a").nth(0).isVisible()) {
+      /* If the pattern returns a movie in the table that means there was an SQL injection 
+       and the test should be carefully reviewd manually */
       await this.writeSQLWarningMessage(pattern);
-    /* If neiter case happened that means the pattern didn't return an error message, but also didn't return any movies, 
-       meaning a possible unrelated error (may be an error regarding SQL) happened, worth invesigating closer */ else
+      return "injection";
+      /* If neiter case happened that means the pattern didn't return an error message, but also didn't return any movies, 
+       meaning a possible unrelated error (may be an error regarding SQL) happened, worth invesigating closer */
+    } else {
       await this.writeSQLCautionMessage(pattern);
+      return "caution";
+    }
   }
 
   async verifyMovieBooleanMessages(pattern) {
@@ -107,16 +121,22 @@ export class SQLInjection {
       await this.page
         .locator(`#main:has-text('${messages.appMessages.movieDoesntExist}')`)
         .isVisible()
-    )
+    ) {
       log.info(messages.customMessages.sqlInjectionFalse);
-    /* If the pattern returns a 'This movie exists' message that means there was an SQL injection 
-       and the test should be carefully reviewd manually */ else if (
+      return false;
+    } else if (
+      /* If the pattern returns a 'This movie exists' message that means there was an SQL injection 
+       and the test should be carefully reviewd manually */
       await this.page
         .locator(`#main:has-text('${messages.appMessages.movieExists}')`)
         .isVisible()
-    )
+    ) {
       await this.writeSQLWarningMessage(pattern);
-    else await this.writeSQLCautionMessage(pattern);
+      return "injection";
+    } else {
+      await this.writeSQLCautionMessage(pattern);
+      return "caution";
+    }
   }
 
   async interceptAndModifyPostRequest({
