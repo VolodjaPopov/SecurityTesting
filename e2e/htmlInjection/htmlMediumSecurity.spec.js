@@ -10,7 +10,7 @@ test.describe("HTML Injection tests (Medium security)", () => {
   });
 
   test(
-    "Reflected GET (Field entry)",
+    "Medium - Reflected GET (Field entry)",
     {
       tag: ["@security", "@htmlInjection"],
     },
@@ -32,7 +32,7 @@ test.describe("HTML Injection tests (Medium security)", () => {
   );
 
   test(
-    "Reflected GET (URL entry)",
+    "Medium - Reflected GET (URL entry)",
     {
       tag: ["@security", "@htmlInjection"],
     },
@@ -54,7 +54,7 @@ test.describe("HTML Injection tests (Medium security)", () => {
   );
 
   test(
-    "Reflected POST",
+    "Medium - Reflected POST",
     {
       tag: ["@security", "@htmlInjection"],
     },
@@ -79,7 +79,7 @@ test.describe("HTML Injection tests (Medium security)", () => {
      This test will then insted show that basic (and even advanced) injection patterns do not work for this level. */
 
   test(
-    "Stored (Blog)",
+    "Medium - Stored (Blog)",
     {
       tag: ["@security", "@htmlInjection"],
     },

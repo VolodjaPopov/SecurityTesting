@@ -9,7 +9,7 @@ test.describe("SQL Injection login tests (Low security)", () => {
   });
 
   test(
-    "Login Form - Hero (Username injections)",
+    "Low - Login Form - Hero (Username injections)",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -25,7 +25,7 @@ test.describe("SQL Injection login tests (Low security)", () => {
   );
 
   test(
-    "Login Form - Hero (Password injections)",
+    "Low - Login Form - Hero (Password injections)",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -41,7 +41,7 @@ test.describe("SQL Injection login tests (Low security)", () => {
   );
 
   test(
-    "Login Form - User (Username injections)",
+    "Low - Login Form - User (Username injections)",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -57,7 +57,7 @@ test.describe("SQL Injection login tests (Low security)", () => {
   );
 
   test(
-    "Login Form - User (Password injections)",
+    "Low - Login Form - User (Password injections)",
     {
       tag: ["@security", "@sqlInjection"],
     },

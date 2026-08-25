@@ -11,7 +11,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
   });
 
   test(
-    "Search GET",
+    "Low - Search GET",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -29,7 +29,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
   );
 
   test(
-    "Search GET (URL Injection)",
+    "Low - Search GET (URL Injection)",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -51,7 +51,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
   );
 
   test(
-    "Seach POST",
+    "Low - Seach POST",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -69,7 +69,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
   );
 
   test(
-    "Select GET",
+    "Low - Select GET",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -87,7 +87,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
   );
 
   test(
-    "Blind Boolean",
+    "Low - Blind Boolean",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -105,7 +105,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
   );
 
   test(
-    "Stored (Blog)",
+    "Low - Stored (Blog)",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -121,7 +121,7 @@ test.describe("SQL Injection tests (Low Security)", () => {
   );
 
   test(
-    "Select POST",
+    "Low - Select POST",
     {
       tag: ["@security", "@sqlInjection"],
     },

@@ -14,7 +14,7 @@ test.describe("SQL Injection tests (Medium Security)", () => {
   });
 
   test(
-    "Search GET",
+    "Medium - Search GET",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -32,7 +32,7 @@ test.describe("SQL Injection tests (Medium Security)", () => {
   );
 
   test(
-    "Search GET (URL Injection)",
+    "Medium - Search GET (URL Injection)",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -54,7 +54,7 @@ test.describe("SQL Injection tests (Medium Security)", () => {
   );
 
   test(
-    "Seach POST",
+    "Medium - Seach POST",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -72,7 +72,7 @@ test.describe("SQL Injection tests (Medium Security)", () => {
   );
 
   test(
-    "Select GET",
+    "Medium - Select GET",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -90,7 +90,7 @@ test.describe("SQL Injection tests (Medium Security)", () => {
   );
 
   test(
-    "Blind Boolean",
+    "Medium - Blind Boolean",
     {
       tag: ["@security", "@sqlInjection"],
     },
@@ -108,7 +108,7 @@ test.describe("SQL Injection tests (Medium Security)", () => {
   );
 
   test(
-    "Stored (Blog)",
+    "Medium - Stored (Blog)",
     {
       tag: ["@security", "@sqlInjection"],
     },

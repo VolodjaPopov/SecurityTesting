@@ -13,7 +13,7 @@ test.describe("HTML Injection tests (High security)", () => {
   });
 
   test(
-    "Reflected GET (Field entry)",
+    "High - Reflected GET (Field entry)",
     {
       tag: ["@security", "@htmlInjection"],
     },
@@ -35,7 +35,7 @@ test.describe("HTML Injection tests (High security)", () => {
   );
 
   test(
-    "Reflected GET (URL entry)",
+    "High - Reflected GET (URL entry)",
     {
       tag: ["@security", "@htmlInjection"],
     },
@@ -57,7 +57,7 @@ test.describe("HTML Injection tests (High security)", () => {
   );
 
   test(
-    "Reflected POST",
+    "High - Reflected POST",
     {
       tag: ["@security", "@htmlInjection"],
     },
@@ -79,7 +79,7 @@ test.describe("HTML Injection tests (High security)", () => {
   );
 
   test(
-    "Stored (Blog)",
+    "High - Stored (Blog)",
     {
       tag: ["@security", "@htmlInjection"],
     },
