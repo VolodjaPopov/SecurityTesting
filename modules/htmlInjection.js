@@ -22,7 +22,7 @@ export class HTMLInjection {
     this.table = page.locator('[id="table_yellow"]');
   }
 
-  async wrapHeading({ value, tag = "h1", encoded = false }) {
+  async wrapTag({ value, tag = "h1", encoded = false }) {
     let newValue;
     switch (encoded) {
       case true:
@@ -50,7 +50,7 @@ export class HTMLInjection {
       await this.lastName.fill(await lastName);
       await this.goButton.click();
     }
-    let wrappedFirstName = await this.wrapHeading({
+    let wrappedFirstName = await this.wrapTag({
       value: await firstName,
       tag: expectedTag,
       encoded,
@@ -84,7 +84,7 @@ export class HTMLInjection {
   }) {
     switch (expectedTag) {
       case "h1":
-        let wrappedFirstName = await this.wrapHeading({
+        let wrappedFirstName = await this.wrapTag({
           value: await firstName,
           encoded,
         });
@@ -98,7 +98,7 @@ export class HTMLInjection {
         );
         break;
       case "script":
-        let wrappedScript = await this.wrapHeading({
+        let wrappedScript = await this.wrapTag({
           value: await firstName,
           tag: "script",
           encoded,
@@ -136,7 +136,7 @@ export class HTMLInjection {
     value = generalFunctions.generateRandomString(10),
     encoded = false,
   }) {
-    let wrappedValue = await this.wrapHeading({ value: await value, encoded });
+    let wrappedValue = await this.wrapTag({ value: await value, encoded });
     await this.tableEntry.fill(wrappedValue[0]);
     await this.tableSubmitButton.click();
     if (
@@ -157,7 +157,7 @@ export class HTMLInjection {
     let rowsBefore = await generalFunctions.countLocators(
       await this.table.locator("tr")
     );
-    let wrappedValue = await this.wrapHeading({
+    let wrappedValue = await this.wrapTag({
       value: await value,
       tag: "script",
       encoded,
