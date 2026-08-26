@@ -85,4 +85,32 @@ test.describe("XSS tests (Low security)", () => {
       });
     }
   );
+
+  test(
+    "Low - Reflected JSON",
+    {
+      tag: ["@security", "@xss"],
+    },
+    async ({ generalFunctions, htmlInjection, sqlInjection }) => {
+      await test.step("Go to the 'XSS Reflected (JSON)' page", async () => {
+        await generalFunctions.visitPage(pages.defaultPages.xssJson);
+      });
+
+      await test.step("Fill search field with Injection", async () => {
+        let pattern = await htmlInjection.wrapTagJsonEndScript(
+          await htmlInjection.injectHTMLCodeAsString({
+            elementId: newId,
+            textContent: newText,
+          })
+        );
+
+        await sqlInjection.movieSearchField.fill(pattern);
+        await sqlInjection.searchButton.click();
+      });
+
+      await test.step("Verify and log if added script was successfully executed", async () => {
+        await htmlInjection.verifyNewlyAddedField(newId, newText);
+      });
+    }
+  );
 });

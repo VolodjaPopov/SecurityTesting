@@ -35,6 +35,10 @@ export class HTMLInjection {
     return [newValue, tag];
   }
 
+  async wrapTagJsonEndScript(value) {
+    return `\"}]}' </script> <script> ${value} </script>`;
+  }
+
   async verifyURLInjections({
     firstName = generalFunctions.generateRandomString(10),
     lastName = generalFunctions.generateRandomString(10),

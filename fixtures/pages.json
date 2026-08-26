@@ -12,7 +12,8 @@
     "loginHero": "sqli_3.php",
     "loginUser": "sqli_16.php",
     "xssGet": "xss_get.php",
-    "xssPost": "xss_post.php"
+    "xssPost": "xss_post.php",
+    "xssJson": "xss_json.php"
   },
   "validGETRequestPages": {
     "getSearchValidOption": "sqli_1.php?title=Terminator+Salvation&action=search",
