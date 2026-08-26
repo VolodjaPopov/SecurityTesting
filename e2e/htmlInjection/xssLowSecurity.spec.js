@@ -2,7 +2,13 @@ import { test } from "../../modules/base";
 import pages from "../../fixtures/pages.json";
 
 test.describe("XSS tests (Low security)", () => {
-  test.beforeEach(async ({ login }) => {
+  let newId;
+  let newText;
+
+  test.beforeEach(async ({ generalFunctions, login }) => {
+    newId = await generalFunctions.generateRandomString(5);
+    newText = await generalFunctions.generateRandomString(5);
+
     await test.step("Log in with low security level", async () => {
       await login.loginUser({});
     });
@@ -14,19 +20,17 @@ test.describe("XSS tests (Low security)", () => {
       tag: ["@security", "@xss"],
     },
     async ({ generalFunctions, htmlInjection }) => {
-      let newId = await generalFunctions.generateRandomString(5);
-      let newText = await generalFunctions.generateRandomString(5);
-      await test.step("Go to the 'HTML Injection Reflected (GET)' page", async () => {
+      await test.step("Go to the 'XSS Reflected (GET)' page", async () => {
         await generalFunctions.visitPage(pages.defaultPages.xssGet);
       });
 
-      await test.step("Verify and log HTML injections for this page (by entering injections into the 'first name' field)", async () => {
+      await test.step("Verify and log XSS for this page (by entering injections into the 'first name' field)", async () => {
         await htmlInjection.verifyNameFields({
           firstName: await htmlInjection.injectHTMLCodeAsString({
             elementId: newId,
             textContent: newText,
           }),
-          expectedInjection: "script",
+          expectedTag: "script",
           newId,
           newText,
         });
@@ -40,12 +44,20 @@ test.describe("XSS tests (Low security)", () => {
       tag: ["@security", "@xss"],
     },
     async ({ generalFunctions, htmlInjection }) => {
-      await test.step("Go to the 'HTML Injection Reflected (GET)' page", async () => {
+      await test.step("Go to the 'XSS Reflected (GET)' page", async () => {
         await generalFunctions.visitPage(pages.defaultPages.xssGet);
       });
 
-      await test.step("Verify and log HTML injections for this page (by entering injections into the URL)", async () => {
-        await htmlInjection.verifyURLInjections({});
+      await test.step("Verify and log XSS for this page (by entering injections into the URL)", async () => {
+        await htmlInjection.verifyURLInjections({
+          firstName: await htmlInjection.injectHTMLCodeAsString({
+            elementId: newId,
+            textContent: newText,
+          }),
+          expectedTag: "script",
+          newId,
+          newText,
+        });
       });
     }
   );
@@ -56,12 +68,20 @@ test.describe("XSS tests (Low security)", () => {
       tag: ["@security", "@xss"],
     },
     async ({ generalFunctions, htmlInjection }) => {
-      await test.step("Go to the 'HTML Injection Reflected (POST)' page", async () => {
+      await test.step("Go to the 'XSS Reflected (POST)' page", async () => {
         await generalFunctions.visitPage(pages.defaultPages.xssPost);
       });
 
-      await test.step("Verify and log HTML injections for this page (by entering injections into the 'first name' field)", async () => {
-        await htmlInjection.verifyNameFields({});
+      await test.step("Verify and log XSS for this page (by entering injections into the 'first name' field)", async () => {
+        await htmlInjection.verifyNameFields({
+          firstName: await htmlInjection.injectHTMLCodeAsString({
+            elementId: newId,
+            textContent: newText,
+          }),
+          expectedTag: "script",
+          newId,
+          newText,
+        });
       });
     }
   );

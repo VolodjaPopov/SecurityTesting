@@ -38,9 +38,12 @@ export class HTMLInjection {
   async verifyURLInjections({
     firstName = generalFunctions.generateRandomString(10),
     lastName = generalFunctions.generateRandomString(10),
+    expectedTag = "h1",
     parameter = "firstname",
     submitValid = true,
     encoded = false,
+    newId,
+    newText,
   }) {
     if (submitValid) {
       await this.firstName.fill(await firstName);
@@ -49,6 +52,7 @@ export class HTMLInjection {
     }
     let wrappedFirstName = await this.wrapHeading({
       value: await firstName,
+      tag: expectedTag,
       encoded,
     });
     let newURL = await generalFunctions.updateParam(
@@ -56,27 +60,30 @@ export class HTMLInjection {
       wrappedFirstName[0]
     );
     await this.page.goto(newURL);
-    if (
-      await this.page
-        .locator(`${wrappedFirstName[1]}:has-text('${await firstName}')`)
-        .isVisible()
-    ) {
-      log.warn(messages.customMessages.htmlInjectionTrue);
-      log.plain(wrappedFirstName[0]);
-      throw new Error(messages.customMessages.thrownError);
-    } else log.info(messages.customMessages.htmlInjectionFalse);
+    switch (expectedTag) {
+      case "h1":
+        await this.verifyInjectionInNameField(
+          wrappedFirstName[1],
+          firstName,
+          wrappedFirstName[0]
+        );
+        break;
+      case "script":
+        await this.verifyNewlyAddedField(newId, newText);
+        break;
+    }
   }
 
   async verifyNameFields({
     firstName = generalFunctions.generateRandomString(10),
     lastName = generalFunctions.generateRandomString(10),
-    expectedInjection = "heading",
+    expectedTag = "h1",
     encoded = false,
     newId,
     newText,
   }) {
-    switch (expectedInjection) {
-      case "heading":
+    switch (expectedTag) {
+      case "h1":
         let wrappedFirstName = await this.wrapHeading({
           value: await firstName,
           encoded,
@@ -84,15 +91,11 @@ export class HTMLInjection {
         await this.firstName.fill(wrappedFirstName[0]);
         await this.lastName.fill(await lastName);
         await this.goButton.click();
-        if (
-          await this.page
-            .locator(`${wrappedFirstName[1]}:has-text('${await firstName}')`)
-            .isVisible()
-        ) {
-          log.warn(messages.customMessages.htmlInjectionTrue);
-          log.plain(wrappedFirstName[0]);
-          throw new Error(messages.customMessages.thrownError);
-        } else log.info(messages.customMessages.htmlInjectionFalse);
+        await this.verifyInjectionInNameField(
+          wrappedFirstName[1],
+          firstName,
+          wrappedFirstName[0]
+        );
         break;
       case "script":
         let wrappedScript = await this.wrapHeading({
@@ -103,14 +106,30 @@ export class HTMLInjection {
         await this.firstName.fill(wrappedScript[0]);
         await this.lastName.fill(await lastName);
         await this.goButton.click();
-        if (
-          await this.page
-            .locator(`[id='id${newId}']:has-text('${newText}')`)
-            .isVisible()
-        )
-          log.warn(messages.customMessages.htmlInjectionTrue);
-        else log.info(messages.customMessages.htmlInjectionFalse);
+        await this.verifyNewlyAddedField(newId, newText);
+        break;
     }
+  }
+
+  async verifyInjectionInNameField(type, text, fullInjection) {
+    if (
+      await this.page.locator(`${type}:has-text('${await text}')`).isVisible()
+    ) {
+      log.warn(messages.customMessages.htmlInjectionTrue);
+      log.plain(fullInjection);
+      throw new Error(messages.customMessages.thrownError);
+    } else log.info(messages.customMessages.htmlInjectionFalse);
+  }
+
+  async verifyNewlyAddedField(newId, newText) {
+    if (
+      await this.page
+        .locator(`[id='id${newId}']:has-text('${newText}')`)
+        .isVisible()
+    ) {
+      log.warn(messages.customMessages.htmlInjectionTrue);
+      throw new Error(messages.customMessages.thrownError);
+    } else log.info(messages.customMessages.htmlInjectionFalse);
   }
 
   async verifyTableEntryInjection({
