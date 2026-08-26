@@ -72,6 +72,8 @@ export class HTMLInjection {
     lastName = generalFunctions.generateRandomString(10),
     expectedInjection = "heading",
     encoded = false,
+    newId,
+    newText,
   }) {
     switch (expectedInjection) {
       case "heading":
@@ -92,6 +94,22 @@ export class HTMLInjection {
           throw new Error(messages.customMessages.thrownError);
         } else log.info(messages.customMessages.htmlInjectionFalse);
         break;
+      case "script":
+        let wrappedScript = await this.wrapHeading({
+          value: await firstName,
+          tag: "script",
+          encoded,
+        });
+        await this.firstName.fill(wrappedScript[0]);
+        await this.lastName.fill(await lastName);
+        await this.goButton.click();
+        if (
+          await this.page
+            .locator(`[id='id${newId}']:has-text('${newText}')`)
+            .isVisible()
+        )
+          log.warn(messages.customMessages.htmlInjectionTrue);
+        else log.info(messages.customMessages.htmlInjectionFalse);
     }
   }
 
@@ -161,5 +179,26 @@ export class HTMLInjection {
       log.caution(messages.customMessages.htmlInjectionCautionMessage);
       throw new Error(messages.customMessages.thrownCautionError);
     }
+  }
+
+  async injectHTML({
+    elementType = "div",
+    elementId = "xssInjectionTestElement",
+    textContent = generalFunctions.generateRandomString(10),
+  }) {
+    const el = document.createElement(elementType);
+    el.id = elementId;
+    el.textContent = await textContent;
+    document.body.appendChild(el);
+  }
+
+  async injectHTMLCodeAsString({
+    elementType = "div",
+    elementId = generalFunctions.generateRandomString(10),
+    textContent = generalFunctions.generateRandomString(10),
+  }) {
+    let elId = await elementId;
+    let text = await textContent;
+    return `const el = document.createElement('${elementType}'); el.id = 'id${elId}'; el.textContent = '${text}'; document.body.appendChild(el);`;
   }
 }
