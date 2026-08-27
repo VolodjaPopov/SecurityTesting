@@ -1,4 +1,4 @@
-import { test } from "../../modules/base";
+import { expect, test } from "../../modules/base";
 import pages from "../../fixtures/pages.json";
 import htmlPatterns from "../../fixtures/htmlInjectionPatterns.json";
 
@@ -136,7 +136,7 @@ test.describe("XSS tests (Low security)", () => {
       });
 
       await test.step("Check if alert pops up after entering the payload and log appropriate message", async () => {
-        await commonActions.verifyAlertDialog(
+        let dialogExists = await commonActions.verifyAlertDialog(
           await login.loginUser({
             username: pattern,
             goToPage: false,
@@ -144,6 +144,7 @@ test.describe("XSS tests (Low security)", () => {
             securityLevel: null,
           })
         );
+        await expect(dialogExists).toBe(false);
       });
     }
   );

@@ -52,7 +52,10 @@ export class CommonActions {
     if (dialog) {
       log.warn(`${messages.customMessages.htmlInjectionTrue}\n
         Message: ${dialog.message()}`);
-      await dialog.accept();
-    } else log.info(messages.customMessages.htmlInjectionFalse);
+      return true;
+    } else {
+      log.info(messages.customMessages.htmlInjectionFalse);
+      return false;
+    }
   }
 }
