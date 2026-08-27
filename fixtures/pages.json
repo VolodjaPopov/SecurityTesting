@@ -13,7 +13,8 @@
     "loginUser": "sqli_16.php",
     "xssGet": "xss_get.php",
     "xssPost": "xss_post.php",
-    "xssJson": "xss_json.php"
+    "xssJson": "xss_json.php",
+    "xssLogin": "xss_login.php"
   },
   "validGETRequestPages": {
     "getSearchValidOption": "sqli_1.php?title=Terminator+Salvation&action=search",

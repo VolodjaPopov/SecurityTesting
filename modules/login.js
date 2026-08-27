@@ -43,24 +43,18 @@ export class Login {
       case "high":
         await this.securityLevelBox.selectOption("2");
         break;
+      default:
+        break;
     }
     await this.loginButton.click();
-    switch (success) {
-      case true:
-        await expect(this.headerMenu).toContainText(`Welcome ${username}`, {
-          ignoreCase: true,
-        });
-        await generalFunctions.checkForElementVisibility(
-          [this.loginField, this.passwordField],
-          false
-        );
-        break;
-      case false:
-        await generalFunctions.checkForElementVisibility([
-          this.loginField,
-          this.passwordField,
-        ]);
-        break;
+    if (success) {
+      await expect(this.headerMenu).toContainText(`Welcome ${username}`, {
+        ignoreCase: true,
+      });
+      await generalFunctions.checkForElementVisibility(
+        [this.loginField, this.passwordField],
+        false
+      );
     }
   }
 

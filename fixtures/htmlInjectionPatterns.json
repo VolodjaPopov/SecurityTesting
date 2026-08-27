@@ -1,8 +1,10 @@
 {
   "noWrapping": {
     "scripts": {
-      "writeLine": "document.write(\"Hello\")"
-    }
+      "writeLine": "document.write(\"Hello\")",
+      "alert": "alert(\"Hello\")"
+    },
+    "preScriptHTML": "x' or 1=1;"
   },
   "withWrapping": {
     "scriptsArr": [

@@ -1,5 +1,6 @@
 import { test } from "../../modules/base";
 import pages from "../../fixtures/pages.json";
+import htmlPatterns from "../../fixtures/htmlInjectionPatterns.json";
 
 test.describe("XSS tests (Low security)", () => {
   let newId;
@@ -110,6 +111,39 @@ test.describe("XSS tests (Low security)", () => {
 
       await test.step("Verify and log if added script was successfully executed", async () => {
         await htmlInjection.verifyNewlyAddedField(newId, newText);
+      });
+    }
+  );
+
+  test(
+    "Low - Reflected Login",
+    {
+      tag: ["@security", "@xss"],
+    },
+    async ({ generalFunctions, htmlInjection, commonActions, login }) => {
+      let pattern;
+
+      await test.step("Go to the 'XSS Reflected (Login)' page", async () => {
+        await generalFunctions.visitPage(pages.defaultPages.xssLogin);
+      });
+
+      await test.step("Generate XXS for login", async () => {
+        let wrappedPattern = await htmlInjection.wrapTag({
+          value: htmlPatterns.noWrapping.scripts.alert,
+          tag: "script",
+        });
+        pattern = `${htmlPatterns.noWrapping.preScriptHTML}${wrappedPattern[0]}`;
+      });
+
+      await test.step("Check if alert pops up after entering the payload and log appropriate message", async () => {
+        await commonActions.verifyAlertDialog(
+          await login.loginUser({
+            username: pattern,
+            goToPage: false,
+            success: false,
+            securityLevel: null,
+          })
+        );
       });
     }
   );

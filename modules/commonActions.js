@@ -1,4 +1,4 @@
-import { expect } from "./base";
+import { log, expect } from "./base";
 import messages from "../fixtures/messages.json";
 import { GeneralFunctions } from "./generalFunctions";
 
@@ -39,5 +39,20 @@ export class CommonActions {
         `font:has-text("${messages.appMessages.allEntriesDeleted}")`
       )
     ).toBeVisible();
+  }
+
+  async verifyAlertDialog(action) {
+    const dialogPromise = this.page
+      .waitForEvent("dialog", { timeout: 3000 })
+      .catch(() => null);
+
+    await action;
+
+    const dialog = await dialogPromise;
+    if (dialog) {
+      log.warn(`${messages.customMessages.htmlInjectionTrue}\n
+        Message: ${dialog.message()}`);
+      await dialog.accept();
+    } else log.info(messages.customMessages.htmlInjectionFalse);
   }
 }
