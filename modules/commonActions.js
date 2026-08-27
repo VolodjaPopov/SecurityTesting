@@ -52,6 +52,7 @@ export class CommonActions {
     if (dialog) {
       log.warn(`${messages.customMessages.htmlInjectionTrue}\n
         Message: ${dialog.message()}`);
+      await dialog.accept();
       return true;
     } else {
       log.info(messages.customMessages.htmlInjectionFalse);
