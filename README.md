@@ -17,3 +17,11 @@ Many tests for low security SQL and HTML injections have been written. For now, 
 So far, all the tests have been done using only Playwright, with no external tools (intercepting request can also be done only using Playwright), while this approach may not be the most effective, it can provide a solid basic foundation that can be ran during regression, and if any major Injection errors occur during a deploy, the regression will catch it.
 
 Next step will be polishing already written tests to be more effective, plus writing new ones where possible.
+
+2026-08-28 Update:
+
+All tests have been refactored to act like classic regression playwright tests. Many tests for low security levels fail because they are vulnerable to an injection of some sort, while some medium and all high will pass because the fields are well protected.
+
+No external tools have been used for any of the tests, things like intercepting and changing requests, interacting and expecting alert dialogs in browsers can all be done using playwright. The tests, as written, can be used for a basic regression pipeline that will check any basic injections (with occasional more advanced techniques like intercepting and changing requests).
+
+The list of patterns can definitely be greatly expanded, depending on the context of the field used for injections and SQL types, but for bWAPP this list has proven to function well. Will work on optimizing the tests for better results, and reporting (which pattern broke the test, a screenshot of the patter, other error options...)
