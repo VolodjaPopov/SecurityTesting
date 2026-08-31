@@ -20,6 +20,10 @@ export class HTMLInjection {
     this.allEntriesButton = page.locator('[id="entry_all"]');
     this.deleteEntryButton = page.locator('[id="entry_delete"]');
     this.table = page.locator('[id="table_yellow"]');
+
+    // XSS page locators
+    this.voteName = page.locator('input[name="name"]');
+    this.continueButton = page.locator('button[value="vote"]');
   }
 
   async wrapTag({ value, tag = "h1", encoded = false }) {

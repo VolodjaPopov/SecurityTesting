@@ -14,7 +14,8 @@
     "xssGet": "xss_get.php",
     "xssPost": "xss_post.php",
     "xssJson": "xss_json.php",
-    "xssLogin": "xss_login.php"
+    "xssLogin": "xss_login.php",
+    "xssHref": "xss_href-1.php"
   },
   "validGETRequestPages": {
     "getSearchValidOption": "sqli_1.php?title=Terminator+Salvation&action=search",

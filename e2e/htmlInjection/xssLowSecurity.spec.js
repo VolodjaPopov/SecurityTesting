@@ -156,4 +156,35 @@ test.describe("XSS tests (Low security)", () => {
       });
     }
   );
+
+  test(
+    "Low - Reflected HREF",
+    {
+      tag: ["@security", "@xss"],
+    },
+    async ({ generalFunctions, htmlInjection, commonActions }) => {
+      await test.step("Go to the 'XSS Reflected (HREF)' page", async () => {
+        await generalFunctions.visitPage(pages.defaultPages.xssHref);
+      });
+
+      await test.step("Enter script injection into name field", async () => {
+        let alertScript = await htmlInjection.wrapTag({
+          value: htmlPatterns.noWrapping.scripts.alert,
+          tag: "script",
+        });
+        let pattern = await htmlInjection.closeHTMLTagPreValue({
+          tag: "a",
+          value: alertScript[0],
+        });
+        await htmlInjection.voteName.fill(pattern);
+      });
+
+      await test.step("Verify alert dialog and log message", async () => {
+        let dialog = await commonActions.verifyAlertDialog(
+          await htmlInjection.continueButton.click()
+        );
+        await expect(dialog).toBe(false);
+      });
+    }
+  );
 });
