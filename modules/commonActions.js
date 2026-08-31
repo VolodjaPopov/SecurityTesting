@@ -50,7 +50,7 @@ export class CommonActions {
 
     const dialog = await dialogPromise;
     if (dialog) {
-      log.warn(`${messages.customMessages.htmlInjectionTrue}\n
+      log.warn(`${messages.customMessages.htmlInjectionTrue}
         Message: ${dialog.message()}`);
       await dialog.accept();
       return true;

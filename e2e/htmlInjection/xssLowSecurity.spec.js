@@ -92,25 +92,33 @@ test.describe("XSS tests (Low security)", () => {
     {
       tag: ["@security", "@xss"],
     },
-    async ({ generalFunctions, htmlInjection, sqlInjection }) => {
+    async ({
+      generalFunctions,
+      htmlInjection,
+      sqlInjection,
+      commonActions,
+    }) => {
       await test.step("Go to the 'XSS Reflected (JSON)' page", async () => {
         await generalFunctions.visitPage(pages.defaultPages.xssJson);
       });
 
       await test.step("Fill search field with Injection", async () => {
-        let pattern = await htmlInjection.wrapTagJsonEndScript(
-          await htmlInjection.injectHTMLCodeAsString({
-            elementId: newId,
-            textContent: newText,
-          })
-        );
-
+        let alertScript = await htmlInjection.wrapTag({
+          value: htmlPatterns.noWrapping.scripts.alert,
+          tag: "script",
+        });
+        let pattern = await htmlInjection.closeHTMLTagPreValue({
+          tag: "script",
+          value: alertScript[0],
+        });
         await sqlInjection.movieSearchField.fill(pattern);
-        await sqlInjection.searchButton.click();
       });
 
-      await test.step("Verify and log if added script was successfully executed", async () => {
-        await htmlInjection.verifyNewlyAddedField(newId, newText);
+      await test.step("Verify if alert has triggered and log appropriate response", async () => {
+        let alert = await commonActions.verifyAlertDialog(
+          await sqlInjection.searchButton.click()
+        );
+        await expect(alert).toBe(false);
       });
     }
   );
