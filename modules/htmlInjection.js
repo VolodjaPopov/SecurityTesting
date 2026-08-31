@@ -23,16 +23,18 @@ export class HTMLInjection {
   }
 
   async wrapTag({ value, tag = "h1", encoded = false }) {
-    let newValue;
-    switch (encoded) {
-      case true:
-        newValue = `%3C${tag}%3E ${value} $3C%2F${tag}%3E`;
-        break;
-      case false:
-        newValue = `<${tag}> ${value} </${tag}>`;
-        break;
-    }
+    let newValue = encoded
+      ? `%3C${tag}%3E ${value} %3C%2F${tag}%3E`
+      : `<${tag}> ${value} </${tag}>`;
     return [newValue, tag];
+  }
+
+  async closeHTMLTagPreValue({ tag, value, encoded = false }) {
+    let closeTag = encoded ? `%3C%2F${tag}%3E` : `</${tag}>`;
+    let prefix =
+      tag === "a" ? (encoded ? "%3EClick Me!!!" : ">Click Me!!!") : "";
+
+    return `${prefix}${closeTag} ${value}`;
   }
 
   async wrapTagJsonEndScript(value) {
