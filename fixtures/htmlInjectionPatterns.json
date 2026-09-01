@@ -23,6 +23,10 @@
       "<IMG DYNSRC=\"javascript:alert('XSS')\">",
       "<IMG LOWSRC=\"javascript:alert('XSS')\">",
       "</td><script>alert(\"Hi\")</script><!--"
+    ],
+    "xssJsonArr": [
+      "\"}]}' </script> <script> alert(\"Hi\") </script>",
+      "\\<a onmouseover=alert(document.cookie)\\>xxs link\\</a\\>"
     ]
   }
 }

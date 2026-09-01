@@ -19,6 +19,7 @@
   },
   "validGETRequestPages": {
     "getSearchValidOption": "sqli_1.php?title=Terminator+Salvation&action=search",
-    "getSelectValidOption": "sqli_2.php?movie=4&action=go"
+    "getSelectValidOption": "sqli_2.php?movie=4&action=go",
+    "xssEvalDate": "xss_eval.php?date=Date()"
   }
 }

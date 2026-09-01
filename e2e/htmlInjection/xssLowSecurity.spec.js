@@ -5,8 +5,10 @@ import htmlPatterns from "../../fixtures/htmlInjectionPatterns.json";
 test.describe("XSS tests (Low security)", () => {
   let newId;
   let newText;
+  let page;
 
-  test.beforeEach(async ({ generalFunctions, login }) => {
+  test.beforeEach(async ({ wpage, generalFunctions, login }) => {
+    page = wpage;
     newId = await generalFunctions.generateRandomString(5);
     newText = await generalFunctions.generateRandomString(5);
 
@@ -185,6 +187,35 @@ test.describe("XSS tests (Low security)", () => {
         );
         await expect(dialog).toBe(false);
       });
+    }
+  );
+
+  test(
+    "Low - Reflected Eval",
+    {
+      tag: ["@security", "@xss"],
+    },
+    async ({ generalFunctions, htmlInjection, commonActions }) => {
+      await test.step("Go to the 'XSS Reflected (Eval)' page", async () => {
+        await generalFunctions.visitPage(
+          pages.validGETRequestPages.xssEvalDate
+        );
+      });
+
+      let alertScript = await htmlInjection.wrapTag({
+        value: htmlPatterns.noWrapping.scripts.alert,
+        tag: "script",
+      });
+      let pattern = await htmlInjection.closeHTMLTagPreValue({
+        tag: "script",
+        value: alertScript[0],
+      });
+
+      let newURL = await generalFunctions.updateParam("date", pattern);
+      let dialog = await commonActions.verifyAlertDialog(
+        await generalFunctions.visitPage(newURL)
+      );
+      await expect(dialog).toBe(false);
     }
   );
 });
